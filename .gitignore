@@ -1,0 +1,51 @@
+.vscode {
+    // Ignore Visual Studio Code settings
+    settings.json
+    extensions.json
+    launch.json
+    tasks.json
+    }   
+// Ignore Visual Studio Code workspace settings
+.vscode/*
+// Ignore Visual Studio Code workspace storage
+.vscode/.storage
+// Ignore Visual Studio Code workspace state
+.vscode/.state
+// Ignore Visual Studio Code workspace logs
+.vscode/.logs
+// Ignore Visual Studio Code workspace cache
+.vscode/.cache
+// Ignore Visual Studio Code workspace backups
+.vscode/.backups
+// Ignore Visual Studio Code workspace snippets
+.vscode/snippets
+// Ignore Visual Studio Code workspace snippets
+.vscode/settings.json
+// Ignore Visual Studio Code workspace snippets
+.vscode/extensions.json
+// Ignore Visual Studio Code workspace snippets
+.vscode/launch.json
+// Ignore Visual Studio Code workspace snippets
+.vscode/tasks.json
+// Ignore Visual Studio Code workspace snippets
+.vscode/keybindings.json
+// Ignore Visual Studio Code workspace snippets
+.vscode/locale.json
+node_modules {
+    // Ignore Node.js modules
+    .gitignore
+    package-lock.json
+    yarn.lock
+    pnpm-lock.yaml
+    .npmrc
+    .yarnrc
+    .pnpmfile.cjs
+    .yarn/cache
+    .yarn/unplugged
+    .yarn/build-state.yml
+    .yarn/install-state.gz
+}
+// Ignore Node.js modules
+node_modules/*
+// Ignore Node.js modules
+node_modules/.cache

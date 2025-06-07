@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Bricks Gym - Forge Your Strength</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #c0392b;
+            --primary-red-dark: #a53024;
+            --secondary-red: #e74c3c;
+            --light-bg: #f5f5f5;
+            --light-bg-secondary: #e0e0e0;
+            --dark-bg: #1a1a1a;
+            --dark-bg-secondary: #2c2c2c;
+            --text-light: #333;
+            --text-dark: #ddd;
+            --border-light: #ddd;
+            --border-dark: #555;
+            --white: #ffffff;
+            --google-blue: #4285f4;
+            --google-blue-dark: #3267d6;
+            --error-color: #e74c3c;
+            --header-height: 80px;
+        }
+
+        body.dark {
+            --light-bg: var(--dark-bg);
+            --light-bg-secondary: var(--dark-bg-secondary);
+            --text-light: var(--text-dark);
+            --border-light: var(--border-dark);
+            --primary-red: var(--secondary-red);
+            --primary-red-dark: var(--primary-red);
+            --secondary-red: var(--primary-red-dark);
+            --header-gradient-start: #a53024;
+            --header-gradient-end: #c0392b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-bg-secondary) 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-light);
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+            opacity: 0.1;
+            z-index: 0;
+            will-change: opacity;
+            animation: brickPulse 12s ease-in-out infinite;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        body.dark::before {
+            background: url('https://www.transparenttextures.com/patterns/brick-wall-dark.png');
+            opacity: 0.15;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        @keyframes brickPulse {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.15; }
+            100% { opacity: 0.1; }
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: url('https://img.icons8.com/ios-filled/50/c0392b/barbell.png') no-repeat center;
+            background-size: 120px;
+            opacity: 0.08;
+            transform: translate(-50%, -50%);
+            animation: liftBarbell 15s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        body.dark::after {
+            background: url('https://img.icons8.com/ios-filled/50/ffffff/barbell.png') no-repeat center;
+            opacity: 0.12;
+        }
+
+        @keyframes liftBarbell {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(3deg) scale(1.03); }
+            100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary-red), var(--secondary-red));
+            color: var(--white);
+            padding: 15px 30px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+
+        body.dark header {
+            background: linear-gradient(90deg, var(--header-gradient-start), var(--header-gradient-end));
+            box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: glowText 2s ease-in-out infinite;
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+
+        @keyframes glowText {
+            0% { text-shadow: 0 0 4px rgba(255,255,255,0.5), 0 0 8px var(--secondary-red); }
+            50% { text-shadow: 0 0 12px rgba(255,255,255,0.7), 0 0 16px var(--primary-red); }
+            100% { text-shadow: 0 0 4px rgba(255,255,255,0.5), 0 0 8px var(--secondary-red); }
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+            padding: 5px;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(20deg) scale(1.1);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .theme-toggle:focus {
+            outline: 2px solid var(--white);
+            outline-offset: 2px;
+        }
+
+        .motivational-quote {
+            position: relative;
+            margin: calc(var(--header-height) + 20px) auto 20px;
+            background: rgba(192, 57, 43, 0.15);
+            color: var(--primary-red);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-style: italic;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: fadeInQuote 3s ease forwards;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        body.dark .motivational-quote {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--secondary-red);
+            text-shadow: 0 1px 2px rgba(255,255,255,0.1);
+        }
+
+        @keyframes fadeInQuote {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: calc(var(--header-height) + 20px) 15px 20px;
+            min-height: calc(100vh - var(--header-height) - 60px);
+            position: relative;
+            z-index: 2;
+        }
+
+        .auth-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            animation: liftUp 1s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        body.dark .auth-container {
+            background: rgba(42, 42, 42, 0.98);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(0,0,0,0.5);
+        }
+
+        @keyframes liftUp {
+            0% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-light);
+            gap: 10px;
+        }
+
+        body.dark .tabs {
+            border-bottom: 2px solid var(--border-dark);
+        }
+
+        .tab {
+            background: var(--light-bg-secondary);
+            color: #666;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            border: 1px solid var(--border-light);
+            border-bottom: none;
+            user-select: none;
+        }
+
+        body.dark .tab {
+            background: #3a3a3a;
+            color: #aaa;
+            border: 1px solid var(--border-dark);
+            border-bottom: none;
+        }
+
+        .tab.active {
+            background: var(--primary-red);
+            color: var(--white);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+            border-color: var(--primary-red);
+        }
+
+        body.dark .tab.active {
+            background: var(--secondary-red);
+            border-color: var(--secondary-red);
+            box-shadow: 0 -2px 6px rgba(255,255,255,0.1);
+        }
+
+        .tab:hover:not(.active) {
+            background: #d0d0d0;
+            color: #333;
+            transform: translateY(-1px);
+        }
+
+        body.dark .tab:hover:not(.active) {
+            background: #4a4a4a;
+            color: #ddd;
+        }
+
+        .tab:focus {
+            outline: 2px solid var(--primary-red);
+            outline-offset: 2px;
+        }
+
+        body.dark .tab:focus {
+            outline: 2px solid var(--secondary-red);
+        }
+
+        .tab-content {
+            display: none;
+            padding-top: 15px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+        }
+
+        body.dark h2 {
+            color: var(--text-dark);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .category-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        body.dark .category-label {
+            color: var(--text-dark);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+            background: var(--light-bg);
+            color: var(--text-light);
+        }
+
+        body.dark input, body.dark select {
+            background: #3a3a3a;
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-red);
+            outline: none;
+            box-shadow: 0 0 8px rgba(192, 57, 43, 0.3);
+            transform: translateY(-1px);
+        }
+
+        body.dark input:focus, body.dark select:focus {
+            border-color: var(--secondary-red);
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
+        }
+
+        input[readonly] {
+            background: #e0e0e0;
+            cursor: not-allowed;
+        }
+
+        body.dark input[readonly] {
+            background: #4a4a4a;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 18px;
+        }
+
+        body.dark select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23dddddd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        }
+
+        .show-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            font-size: 0.85rem;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        body.dark .show-password {
+            color: #aaa;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary-red), var(--secondary-red));
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: background 0.3s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.3s ease-in-out;
+            margin-top: 12px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        body.dark button {
+            background: linear-gradient(45deg, var(--secondary-red), var(--primary-red));
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        body.dark button:disabled {
+            background: #555;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            opacity: 0;
+        }
+
+        button:active:not(:disabled)::after {
+            width: 200px;
+            height: 200px;
+            opacity: 1;
+        }
+
+        button:hover:not(:disabled) {
+            background: linear-gradient(45deg, var(--primary-red-dark), var(--secondary-red));
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(192, 57, 43, 0.4);
+        }
+
+        body.dark button:hover:not(:disabled) {
+            background: linear-gradient(45deg, var(--primary-red), var(--secondary-red));
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .google-login, .anonymous-login {
+            background: linear-gradient(45deg, var(--google-blue), var(--google-blue-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            font-size: 0.95rem;
+        }
+
+        body.dark .google-login, body.dark .anonymous-login {
+            background: linear-gradient(45deg, var(--google-blue-dark), var(--google-blue));
+        }
+
+        .anonymous-login {
+            background: linear-gradient(45deg, #7f8c8d, #95a5a6);
+        }
+
+        body.dark .anonymous-login {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        }
+
+        .google-login:hover:not(:disabled), .anonymous-login:hover:not(:disabled) {
+            background: linear-gradient(45deg, var(--google-blue-dark), var(--google-blue));
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(66, 133, 244, 0.4);
+        }
+
+        body.dark .google-login:hover:not(:disabled), body.dark .anonymous-login:hover:not(:disabled) {
+            background: linear-gradient(45deg, var(--google-blue), var(--google-blue-dark));
+        }
+
+        .google-login img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .error {
+            color: var(--error-color);
+            text-align: center;
+            margin: 12px 0;
+            font-size: 0.9rem;
+            font-weight: bold 600;
+            display: none;
+            padding: 6px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 5px;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+            20%, 40%, 60%, 80% { transform: translateX(6px); }
+        }
+
+        footer {
+            background: linear-gradient(90deg, #333, #444);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+        }
+
+        body.dark footer {
+            background: linear-gradient(90deg, #222, #333);
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            header h1 {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+
+            .motivational-quote {
+                font-size: 1.1rem;
+                padding: 8px 15px;
+                margin: calc(var(--header-height) + 15px) auto 15px;
+            }
+
+            .auth-container {
+                padding: 25px;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            header {
+                padding: 10px 20px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+                letter-spacing: 1.5px;
+            }
+
+            .motivational-quote {
+                font-size: 1rem;
+                padding: 6px 12px;
+                margin: calc(var(--header-height) + 10px) auto 10px;
+            }
+
+            main {
+                padding: calc(var(--header-height) + 10px) 15px 20px;
+                min-height: calc(100vh - var(--header-height) - 30px);
+            }
+
+            .auth-container {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+                border-bottom: none;
+                gap: 5px;
+            }
+
+            .tab {
+                border: 1px solid var(--border-light);
+                border-radius: 8px;
+                margin-bottom: 5px;
+            }
+
+            body.dark .tab {
+                border: 1px solid var(--border-dark);
+            }
+
+            .tab.active {
+                transform: none;
+                box-shadow: none;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            input, select, button {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .google-login, .anonymous-login {
+                padding: 8px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.8rem;
+                letter-spacing: 1px;
+            }
+
+            .motivational-quote {
+                font-size: 0.9rem;
+                padding: 5px 10px;
+            }
+
+            .auth-container {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            input, select, button {
+                padding: 10px;
+                font-size: 0.95rem;
+            }
+
+            .google-login img {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bricks Gym</h1>
+        <button class="theme-toggle" id="theme-toggle" role="button" aria-label="Toggle dark and light theme">🌙</button>
+    </header>
+
+    <div class="motivational-quote" role="status" aria-live="polite">
+        "Strength does not come from what you can do. It comes from overcoming the things you once thought you could not do."
+    </div>
+
+    <main>
+        <div class="auth-container">
+            <div class="tabs" role="tablist">
+                <div id="tab-login" class="tab active" role="tab" aria-selected="true" tabindex="0">Log In</div>
+                <div id="tab-register" class="tab" role="tab" aria-selected="false" tabindex="0">Register</div>
+                <div id="tab-forgot" class="tab" role="tab" aria-selected="false" tabindex="0">Forgot Password</div>
+            </div>
+
+            <div id="login-tab" class="tab-content active" role="tabpanel" aria-labelledby="tab-login">
+                <h2>Login to Your Account</h2>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="login-email" class="category-label">Email</label>
+                        <input type="email" id="login-email" placeholder="Enter your email" required autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password" class="category-label">Password</label>
+                        <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
+                        <span class="show-password" id="login-password-toggle" role="button" tabindex="0">Show</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-gender" class="category-label">Category (select for dashboard access)</label>
+                        <select id="login-gender" required>
+                            <option value="">Select a category</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <button type="submit">Secure Login</button>
+                </form>
+                <button class="google-login" id="google-login-btn">
+                    <img src="http://www.gstatic.com/firebasejs/icon.png" alt="Google Icon">
+                    Log in with Google
+                </button>
+                <button class="anonymous-login" id="anonymous-login-btn">Try as guest login</button>
+                <p id="login-error" class="error" role="alert"></p>
+            </div>
+
+            <div id="register-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-register">
+                <h2>Join Bricks Gym!</h2>
+                <form id="register-form">
+                    <div class="input-group">
+                        <label for="register-name" class="category-label">Full Name</label>
+                        <input type="text" id="register-name" placeholder="Full Name" required autocomplete="name">
+                    </div>
+                    <div class="input-group">
+                        <label for="register-email" class="category-label">Email</label>
+                        <input type="email" id="register-email" placeholder="Enter your email" required autocomplete="email">
+                    </div>
+                    <div class="input-group">
+                        <label for="register-password" class="category-label">Password</label>
+                        <input type="password" id="register-password" placeholder="Password" required autocomplete="new-password">
+                        <span class="show-password" id="register-password-toggle" role="button" tabindex="0">Show</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="register-gender" class="category-label">Category (Select for personalized dashboard)</label>
+                        <select id="register-gender" required>
+                            <option value="">Select a category</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+                <p id="register-error" class="error" role="alert"></p>
+            </div>
+
+            <div id="forgot-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-forgot">
+                <h2>Reset Your Password</h2>
+                <form id="forgot-password-form">
+                    <div class="input-group">
+                        <label for="forgot-email" class="category-label">Email</label>
+                        <input type="email" id="forgot-email" placeholder="Enter your registered email" required autocomplete="email">
+                    </div>
+                    <button type="submit">Reset</button>
+                </form>
+                <p id="forgot-error" class="error" role="alert"></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Bricks Gym. All rights reserved. | Built with Strength & Dedication</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAdBhU3fPl4aKV_y4PkrUX30hW1N2kSPnPx",
+            authDomain: "bricksgymmanagementsystem.firebaseapp.com",
+            projectId: "bricksgymmanagementsystem",
+            storageBucket: "bricksgymmanagementsystem.appspot.com",
+            messagingSenderId: "184509603709",
+            appId: "1:184509603709:web:3f9e8f9b9d9e8f9b9d9e8f",
+            measurementId: "G-3SPS6F9XG9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        // DOM elements
+        const authContainer = document.querySelector('.auth-container');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const themeToggle = document.getElementById('theme-toggle');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const forgotPasswordForm = document.getElementById('forgot-password-form');
+        const googleLoginButton = document.getElementById('google-login-btn');
+        const anonymousLoginButton = document.getElementById('anonymous-login-btn');
+        let isRedirecting = false;
+
+        // Cache user data to reduce Firestore reads
+        const userCache = new Map();
+
+        // Helper function to display errors
+        function displayError(elementId, message, isSuccess = false) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                if (!isSuccess) {
+                    authContainer.classList.add('shake');
+                    setTimeout(() => authContainer.classList.remove('shake'), 500);
+                }
+            }
+        }
+
+        // Map Firebase error codes to user-friendly messages
+        function getFriendlyErrorMessage(error) {
+            const errorMap = {
+                'auth/invalid-email': 'Please enter a valid email address.',
+                'auth/user-not-found': 'No account found with this email.',
+                'auth/wrong-password': 'Incorrect password. Please try again.',
+                'auth/email-already-in-use': 'This email is already in use.',
+                'auth/weak-password': 'Password is too weak. Please use at least 6 characters.',
+                'auth/too-many-requests': 'Too many login attempts. Please try again later.',
+                'auth/popup-closed-by-user': 'Google login popup window closed.',
+                'auth/cancelled-popup-request': 'Login popup cancelled.'
+            };
+            return errorMap[error.code] || `An error occurred: ${error.message}`;
+        }
+
+        // Handle theme toggle
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                themeToggle.textContent = '☀️';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark');
+                themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            });
+        }
+
+        // Handle tab switching
+        function initializeTabs() {
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(tab);
+                });
+                
+                tab.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        switchTab(tab);
+                    }
+                });
+            });
+        }
+
+        function switchTab(selectedTab) {
+            const tabId = selectedTab.id.replace('tab-', '');
+            
+            // Update tabs
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+            selectedTab.classList.add('active');
+            selectedTab.setAttribute('aria-selected', 'true');
+            
+            // Update tab contents
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            
+            clearErrors();
+        }
+
+        // Clear all error messages
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
+            authContainer.classList.remove('shake');
+        }
+
+        // Setup password visibility toggle
+        function setupPasswordToggle(toggleBtnId, passwordInputId) {
+            const toggleBtn = document.getElementById(toggleBtnId);
+            const passwordInput = document.getElementById(passwordInputId);
+            
+            if (toggleBtn && passwordInput) {
+                toggleBtn.addEventListener('click', togglePassword);
+                toggleBtn.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        togglePassword();
+                    }
+                });
+
+                function togglePassword() {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+                    toggleBtn.textContent = type === 'password' ? 'Show' : 'Hide';
+                    toggleBtn.setAttribute('aria-label', `Toggle password visibility to ${type === 'password' ? 'hidden' : 'visible'}`);
+                }
+            }
+        }
+
+        // Setup input validation
+        function setupInputValidation() {
+            document.querySelectorAll('input[required], select').forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(input);
+                });
+                input.addEventListener('blur', function() {
+                    validateInput(input);
+                });
+            });
+
+            const registerPasswordInput = document.getElementById('register-password');
+            if (registerPasswordInput) {
+                registerPasswordInput.addEventListener('input', function() {
+                    const value = registerPasswordInput.value;
+                    if (value.length < 6 && value.length > 0) {
+                        displayError('register-error', 'Password must be at least 6 characters long.');
+                    } else {
+                        clearErrors();
+                    }
+                });
+            }
+        }
+
+        function validateInput(input) {
+            if (!input.value && input.hasAttribute('required')) {
+                input.style.borderColor = 'var(--error-color)';
+            } else if (input.type === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value) && input.value) {
+                    input.style.borderColor = 'var(--error-color)';
+                } else {
+                    input.style.borderColor = 'var(--border-light)';
+                }
+            } else {
+                input.style.borderColor = 'var(--border-light)';
+            }
+        }
+
+        // Manage button loading state
+        function setButtonLoading(button, isLoading, originalText) {
+            button.disabled = isLoading;
+            button.textContent = isLoading ? 'Processing...' : originalText;
+        }
+
+        // Redirect user based on gender
+        async function redirectUser(user, initialGender = null) {
+            if (isRedirecting) return;
+            isRedirecting = true;
+
+            try {
+                let userGender = userCache.get(user.uid)?.gender;
+                if (!userGender) {
+                    const userDocRef = db.collection('users').doc(user.uid);
+                    const docSnap = await userDocRef.get();
+                    if (docSnap.exists) {
+                        userGender = docSnap.data().gender;
+                        userCache.set(user.uid, { gender: userGender });
+                    }
+                }
+
+                if (!userGender && initialGender) {
+                    const userDocRef = db.collection('users').doc(user.uid);
+                    await userDocRef.set({
+                        name: user.displayName || 'Gym Member',
+                        email: user.email,
+                        gender: initialGender,
+                        role: 'member',
+                        membershipStatus: 'trial',
+                        workoutPreferences: [],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                    userGender = initialGender;
+                    userCache.set(user.uid, { gender: userGender });
+                }
+
+                if (userGender === 'male') {
+                    window.location.href = '/dashboard-male.html';
+                } else if (userGender === 'female') {
+                    window.location.href = '/dashboard-female.html';
+                } else if (userGender === 'guest') {
+                    window.location.href = '/dashboard-guest.html';
+                } else {
+                    displayError('login-error', 'Please select a category to proceed.');
+                    isRedirecting = false;
+                    return;
+                }
+            } catch (error) {
+                console.error('Error redirecting user:', error);
+                displayError('login-error', 'An error occurred during redirection.');
+            } finally {
+                isRedirecting = false;
+            }
+        }
+
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const gender = document.getElementById('login-gender').value;
+            const loginButton = loginForm.querySelector('button[type="submit"]');
+            const originalText = loginButton.textContent;
+
+            if (!gender) {
+                displayError('login-error', 'Please select a category.');
+                return;
+            }
+
+            setButtonLoading(loginButton, true, originalText);
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                await redirectUser(user, gender);
+            } catch (error) {
+                displayError('login-error', getFriendlyErrorMessage(error));
+            } finally {
+                setButtonLoading(loginButton, false, originalText);
+            }
+        });
+
+        // Handle register form submission
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const gender = document.getElementById('register-gender').value;
+            const registerButton = registerForm.querySelector('button[type="submit"]');
+            const originalText = registerButton.textContent;
+
+            if (!gender) {
+                displayError('register-error', 'Please select a category.');
+                return;
+            }
+
+            setButtonLoading(registerButton, true, originalText);
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                await user.updateProfile({ displayName: name });
+                await redirectUser(user, gender);
+            } catch (error) {
+                displayError('register-error', getFriendlyErrorMessage(error));
+            } finally {
+                setButtonLoading(registerButton, false, originalText);
+            }
+        });
+
+        // Handle forgot password form submission
+        forgotPasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('forgot-email').value;
+            const resetButton = forgotPasswordForm.querySelector('button[type="submit"]');
+            const originalText = resetButton.textContent;
+
+            setButtonLoading(resetButton, true, originalText);
+
+            try {
+                await auth.sendPasswordResetEmail(email);
+                displayError('forgot-error', 'Password reset email sent! Check your inbox.', true);
+            } catch (error) {
+                displayError('forgot-error', getFriendlyErrorMessage(error));
+            } finally {
+                setButtonLoading(resetButton, false, originalText);
+            }
+        });
+
+        // Handle Google login
+        googleLoginButton.addEventListener('click', async () => {
+            setButtonLoading(googleLoginButton, true, 'Log in with Google');
+            try {
+                const result = await auth.signInWithPopup(provider);
+                const user = result.user;
+                await redirectUser(user);
+            } catch (error) {
+                displayError('login-error', getFriendlyErrorMessage(error));
+            } finally {
+                setButtonLoading(googleLoginButton, false, 'Log in with Google');
+            }
+        });
+
+        // Handle anonymous login
+        anonymousLoginButton.addEventListener('click', async () => {
+            setButtonLoading(anonymousLoginButton, true, 'Try as guest login');
+            try {
+                const userCredential = await auth.signInAnonymously();
+                const user = userCredential.user;
+                await redirectUser(user, 'guest');
+            } catch (error) {
+                displayError('login-error', getFriendlyErrorMessage(error));
+            } finally {
+                setButtonLoading(anonymousLoginButton, false, 'Try as guest login');
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTheme();
+            initializeTabs();
+            setupInputValidation();
+            setupPasswordToggle('login-password-toggle', 'login-password');
+            setupPasswordToggle('register-password-toggle', 'register-password');
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    await redirectUser(user);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

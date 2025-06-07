@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Bricks Gym - Boys Dashboard</title>
+    <style>
+        .visually-hidden {
+            position: absolute;
+            left: -9999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        :root {
+            --bg-color: #f5f5f5;
+            --header-bg: #c0392b;
+            --card-bg: white;
+            --text-color: #333;
+            --border-color: #ddd;
+            --shadow-color: rgba(0,0,0,0.1);
+            --section-header: #c0392b;
+            --tracker-bg: #f0f0f0;
+            --hover-bg: #f0f0f0;
+            --footer-bg: #333;
+            --header-height: 70px;
+        }
+
+        .dark-theme {
+            --bg-color: #121212;
+            --header-bg: #8e1f14;
+            --card-bg: #1e1e1e;
+            --text-color: #f0f0f0;
+            --border-color: #444;
+            --shadow-color: rgba(0,0,0,0.3);
+            --section-header: #ff6b6b;
+            --tracker-bg: #2a2a2a;
+            --hover-bg: #333;
+            --footer-bg: #222;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+            opacity: 0.1;
+            z-index: 0;
+            will-change: opacity;
+            animation: brickShimmer 20s ease-in-out infinite;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes brickShimmer {
+            0% { opacity: 0.1; }
+            50% { opacity: 0.15; }
+            100% { opacity: 0.1; }
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: url('https://img.icons8.com/ios-filled/50/c0392b/dumbbell.png') no-repeat center;
+            background-size: 80px;
+            opacity: 0.08;
+            transform: translate(-50%, -50%);
+            animation: rotateDumbbell 25s linear infinite;
+            will-change: transform;
+        }
+
+        .dark-theme::after {
+            background: url('https://img.icons8.com/ios-filled/50/ffffff/dumbbell.png') no-repeat center;
+            opacity: 0.12;
+        }
+
+        @keyframes rotateDumbbell {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            height: var(--header-height);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .logout-btn, .theme-toggle {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn:hover, .theme-toggle:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: scale(1.02);
+        }
+
+        main {
+            padding: calc(var(--header-height) + 15px) 15px 20px;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            min-height: calc(100vh - var(--header-height) - 50px);
+        }
+
+        .section {
+            margin-bottom: 25px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 12px var(--shadow-color);
+            animation: slideUp 0.5s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .section h2 {
+            color: var(--section-header);
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section h2::after {
+            content: '▼';
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+        }
+
+        .section.collapsed h2::after {
+            transform: rotate(180deg);
+        }
+
+        .content {
+            display: block;
+        }
+
+        .section.collapsed .content {
+            display: none;
+        }
+
+        .exercise-grid, .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-card, .activity-card {
+            background: var(--hover-bg);
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            transition: transform 0.2s;
+        }
+
+        .exercise-card:hover, .activity-card:hover {
+            transform: scale(1.03);
+        }
+
+        .exercise-card h3, .activity-card h3 {
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .exercise-form, .activity-form, .diet-form, .management-form, .member-form, .user-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+        }
+
+        .exercise-form input, .activity-form input, 
+        .diet-form input, .diet-form select, 
+        .management-form input, .management-form select,
+        .member-form input, .member-form select,
+        .user-form input, .user-form select {
+            padding: 7px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            flex: 1;
+            min-width: 90px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .exercise-form button, .activity-form button, 
+        .diet-form button, .management-form button,
+        .member-form button, .user-form button {
+            background-color: var(--section-header);
+            color: white;
+            padding: 7px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            position: relative;
+            font-size: 0.85rem;
+        }
+
+        .exercise-form button:hover, .activity-form button:hover, 
+        .diet-form button:hover, .management-form button:hover,
+        .member-form button:hover, .user-form button:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+        }
+
+        .tracker {
+            margin-top: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .tracker div {
+            background: var(--tracker-bg);
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .tracker button {
+            background: #e74c3c;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tracker button:hover {
+            background: #c0392b;
+        }
+
+        .diet-grid, .management-grid, .user-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .diet-card, .management-card, .user-card {
+            background: var(--hover-bg);
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+
+        .management-card h3, .user-card h3 {
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .user-table, .member-table, .exercise-table, .diet-table, .activity-table, .schedule-table, .goal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 0.85rem;
+        }
+
+        .user-table th, .user-table td,
+        .member-table th, .member-table td,
+        .exercise-table th, .exercise-table td,
+        .diet-table th, .diet-table td,
+        .activity-table th, .activity-table td,
+        .schedule-table th, .schedule-table td,
+        .goal-table th, .goal-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-table th, .member-table th,
+        .exercise-table th, .diet-table th,
+        .activity-table th, .schedule-table th,
+        .goal-table th {
+            background-color: var(--section-header);
+            color: white;
+        }
+
+        .user-table tr:hover, .member-table tr:hover,
+        .exercise-table tr:hover, .diet-table tr:hover,
+        .activity-table tr:hover, .schedule-table tr:hover,
+        .goal-table tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .action-btn {
+            padding: 4px 7px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:hover {
+            opacity: 0.8;
+        }
+
+        .edit-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .left-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .inactive-member {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 -4px 8px var(--shadow-color);
+        }
+
+        .loading::after {
+            content: 'Loading...';
+            font-size: 0.75rem;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .success::after {
+            content: 'Success!';
+            font-size: 0.75rem;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .quote-container {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-left: 4px solid var(--section-header);
+            font-style: italic;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            .exercise-grid, .activity-grid {
+                grid-template-columns: repeat Pink
+                .exercise-grid, .activity-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            .section {
+                padding: 10px;
+            }
+
+            .exercise-form, .activity-form, .diet-form, 
+            .management-form, .member-form, .user-form {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .user-table, .member-table, .exercise-table, 
+            .diet-table, .activity-table, .schedule-table, 
+            .goal-table {
+                font-size: 0.8rem;
+            }
+
+            .action-btn {
+                padding: 3px 6px;
+                font-size: 0.7rem;
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <header>
+        <h1>Boys Fitness Dashboard</h1>
+        <div class="header-controls">
+            <button class="theme-toggle" id="theme-toggle">Dark Mode</button>
+            <button class="logout-btn" id="logout">Logout</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- User Profile Section -->
+        <div class="section" id="user-profile">
+            <h2>User Profile</h2>
+            <div class="content">
+                <div class="quote-container" id="daily-quote">
+                    Loading motivational quote...
+                </div>
+                <div class="user-form">
+                    <label for="user-name">Name</label>
+                    <input type="text" id="user-name" placeholder="Your Name" required>
+                    <label for="user-email">Email</label>
+                    <input type="email" id="user-email" placeholder="Your Email" required>
+                    <label for="user-goal">Fitness Goal</label>
+                    <input type="text" id="user-goal" placeholder="e.g., Gain 5kg muscle">
+                    <label for="user-join">Join Date</label>
+                    <input type="date" id="user-join" required>
+                    <button id="add-user-btn">Save Profile</button>
+                </div>
+                <div class="user-grid">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Goal</th>
+                                <th>Join Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outdoor Exercises Section -->
+        <div class="section" id="outdoor-exercises">
+            <h2>Outdoor Exercises</h2>
+            <div class="content">
+                <div class="exercise-grid">
+                    <div class="exercise-card">
+                        <h3>Running</h3>
+                        <p>Great for cardio and endurance.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Swimming</h3>
+                        <p>Full-body workout, improves flexibility.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Yoga</h3>
+                        <p>Enhances flexibility and mental focus.</p>
+                    </div>
+                    <div class迄今
+                    <div class="exercise-card">
+                        <h3>Walking</h3>
+                        <p>Low-impact cardio workout, improves heart health.</p>
+                    </div>
+                </div>
+                <div class="exercise-form">
+                    <label for="outdoor-exercise" class="visually-hidden">Select Outdoor Exercise</label>
+                    <select id="outdoor-exercise">
+                        <option value="">Select Exercise</option>
+                        <option value="Running">Running</option>
+                        <option value="Swimming">Swimming</option>
+                        <option value="Yoga">Yoga</option>
+                        <option value="Walking">Walking</option>
+                    </select>
+                    <label for="outdoor-duration">Duration (min)</label>
+                    <input type="number" id="outdoor-duration" placeholder="Duration" min="1">
+                    <label for="outdoor-calories">Calories Burned</label>
+                    <input type="number" id="outdoor-calories" placeholder="Calories" min="0">
+                    <button id="add-outdoor-btn">Add</button>
+                </div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr>
+                            <th>Exercise</th>
+                            <th>Duration (min)</th>
+                            <th>Calories</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="outdoor-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Indoor Exercises Section -->
+        <div class="section" id="indoor-exercises">
+            <h2>Indoor Exercises</h2>
+            <div class="content">
+                <div class="exercise-grid">
+                    <div class="exercise-card">
+                        <h3>Push-Ups</h3>
+                        <p>Strengthens chest and arms.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Squats</h3>
+                        <p>Targets legs and glutes.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Plank</h3>
+                        <p>Improves core stability.</p>
+                    </div>
+                </div>
+                <div class="exercise-form">
+                    <label for="indoor-exercise" class="visually-hidden">Select Indoor Exercise</label>
+                    <select id="indoor-exercise">
+                        <option value="">Select Exercise</option>
+                        <option value="Push-Ups">Push-Ups</option>
+                        <option value="Squats">Squats</option>
+                        <option value="Plank">Plank</option>
+                    </select>
+                    <label for="indoor-reps">Reps</label>
+                    <input type="number" id="indoor-reps" placeholder="Reps" min="1">
+                    <label for="indoor-sets">Sets</label>
+                    <input type="number" id="indoor-sets" placeholder="Sets" min="1">
+                    <label for="indoor-calories">Calories Burned</label>
+                    <input type="number" id="indoor-calories" placeholder="Calories" min="0">
+                    <button id="add-indoor-btn">Add</button>
+                </div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr>
+                            <th>Exercise</th>
+                            <th>Reps</th>
+                            <th>Sets</th>
+                            <th>Calories</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="indoor-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gym Exercises Section -->
+        <div class="section" id="gym-exercises">
+            <h2>Gym Exercises</h2>
+            <div class="content">
+                <div class="exercise-grid">
+                    <div class="exercise-card">
+                        <h3>Lat Pulldown</h3>
+                        <p>Targets back and biceps.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Leg Press</h3>
+                        <p>Strengthens quads and glutes.</p>
+                    </div>
+                    <div class="exercise-card">
+                        <h3>Shoulder Press</h3>
+                        <p>Builds shoulder strength.</p>
+                    </div>
+                </div>
+                <div class="exercise-form">
+                    <label for="gym-exercise" class="visually-hidden">Select Gym Exercise</label>
+                    <select id="gym-exercise">
+                        <option value="">Select Exercise</option>
+                        <option value="Lat Pulldown">Lat Pulldown</option>
+                        <option value="Leg Press">Leg Press</option>
+                        <option value="Shoulder Press">Shoulder Press</option>
+                    </select>
+                    <label for="gym-reps">Reps</label>
+                    <input type="number" id="gym-reps" placeholder="Reps" min="1">
+                    <label for="gym-sets">Sets</label>
+                    <input type="number" id="gym-sets" placeholder="Sets" min="1">
+                    <label for="gym-calories">Calories Burned</label>
+                    <input type="number" id="gym-calories" placeholder="Calories" min="0">
+                    <button id="add-gym-btn">Add</button>
+                </div>
+                <table class="exercise-table">
+                    <thead>
+                        <tr>
+                            <th>Exercise</th>
+                            <th>Reps</th>
+                            <th>Sets</th>
+                            <th>Calories</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gym-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Activities Section -->
+        <div class="section" id="activities">
+            <h2>Activities</h2>
+            <div class="content">
+                <div class="activity-grid">
+                    <div class="activity-card">
+                        <h3>Martial Arts</h3>
+                        <p>Improves discipline and focus.</p>
+                    </div>
+                    <div class="activity-card">
+                        <h3>Rock Climbing</h3>
+                        <p>Builds endurance and grip strength.</p>
+                    </div>
+                    <div class="activity-card">
+                        <h3>Boxing</h3>
+                        <p>Enhances speed and power.</p>
+                    </div>
+                </div>
+                <div class="activity-form">
+                    <label for="activity" class="visually-hidden">Select Activity</label>
+                    <select id="activity">
+                        <option value="">Select Activity</option>
+                        <option value="Martial Arts">Martial Arts</option>
+                        <option value="Rock Climbing">Rock Climbing</option>
+                        <option value="Boxing">Boxing</option>
+                    </select>
+                    <label for="activity-duration">Duration (min)</label>
+                    <input type="number" id="activity-duration" placeholder="Duration" min="1">
+                    <label for="activity-calories">Calories Burned</label>
+                    <input type="number" id="activity-calories" placeholder="Calories" min="0">
+                    <button id="add-activity-btn">Add</button>
+                </div>
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Duration (min)</th>
+                            <th>Calories</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Diet Section -->
+        <div class="section" id="diet">
+            <h2>Diet Tracker</h2>
+            <div class="content">
+                <div class="diet-form">
+                    <label for="meal-type">Meal Type</label>
+                    <select id="meal-type">
+                        <option value="">Select Meal</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                        <option value="Snack">Snack</option>
+                    </select>
+                    <label for="meal-description">Description</label>
+                    <input type="text" id="meal-description" placeholder="Meal Description">
+                    <label for="meal-calories">Calories</label>
+                    <input type="number" id="meal-calories" placeholder="Calories" min="0">
+                    <button id="add-diet-btn">Add</button>
+                </div>
+                <table class="diet-table">
+                    <thead>
+                        <tr>
+                            <th>Meal Type</th>
+                            <th>Description</th>
+                            <th>Calories</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="diet-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Gym Management Section -->
+        <div class="section" id="gym-management">
+            <h2>Gym Management</h2>
+            <div class="content">
+                <div class="management-grid">
+                    <!-- Schedule Session -->
+                    <div class="management-card">
+                        <h3>Schedule Gym Session</h3>
+                        <div class="management-form">
+                            <label for="session-date">Date</label>
+                            <input type="date" id="session-date" min="2025-06-25" placeholder="Session Date">
+                            <label for="session-time">Session Time</label>
+                            <select id="session-time">
+                                <option value="">Select Time</option>
+                                <option value="06:00 AM">06:00 AM</option>
+                                <option value="08:00 AM">08:00 AM</option>
+                                <option value="10:00 AM">10:00 AM</option>
+                                <option value="04:00 PM">04:00 PM</option>
+                            </select>
+                            <button id="schedule-session-btn">Schedule</button>
+                        </div>
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="schedule-table-body"></tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Fitness Goals -->
+                    <div class="management-card">
+                        <h3>Fitness Goals</h3>
+                        <div class="management-form">
+                            <label for="goal-description">Goal</label>
+                            <input type="text" id="goal-description" placeholder="Goal (e.g., Bench Press 150kg)">
+                            <label for="goal-deadline">Deadline</label>
+                            <input type="date" id="goal-deadline" min="2025-06-25" placeholder="Deadline">
+                            <button id="set-goal-btn">Set Goal</button>
+                        </div>
+                        <table class="goal-table">
+                            <thead>
+                                <tr>
+                                    <th>Goal</th>
+                                    <th>Deadline</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="goal-table-body"></tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Member Management -->
+                    <div class="management-card">
+                        <h3>Member Management</h3>
+                        <div class="member-form">
+                            <label for="member-name">Name</label>
+                            <input type="text" id="member-name" placeholder="Member Name">
+                            <label for="member-email">Email</label>
+                            <input type="email" id="member-email" placeholder="Email">
+                            <label for="member-phone">Phone</label>
+                            <input type="tel" id="member-phone" placeholder="Phone">
+                            <label for="member-join">Join Date</label>
+                            <input type="date" id="member-join" placeholder="Join Date">
+                            <label for="member-status" class="visually-hidden">Member Status</label>
+                            <select id="member-status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                            <button id="add-member-btn">Add Member</button>
+                        </div>
+                        <table class="member-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Join Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="member-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2025 Bricks Gym. All rights reserved.
+    </footer>
+
+    <script>
+        // Check authentication on page load
+        if (!localStorage.getItem('auth')) {
+            window.location.href = 'index.html';
+        }
+
+        // Helper functions for local storage
+        const saveToLocalStorage = (key, data) => {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                if (e.name === 'QuotaExceededError') {
+                    alert('Local storage is full. Please clear some data.');
+                    return;
+                }
+                console.error('Error saving to local storage:', e);
+            }
+        };
+
+        const loadFromLocalStorage = (key, defaultValue) => {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch (e) {
+                console.error('Error loading from localStorage:', e);
+                return defaultValue;
+            }
+        };
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-theme')) {
+                document.body.classList.remove('dark-theme');
+                document.body.classList.add('light-theme');
+                themeToggle.textContent = 'Dark Mode';
+                saveToLocalStorage('theme', 'light');
+            } else {
+                document.body.classList.remove('light-theme');
+                document.body.classList.add('dark-theme');
+                themeToggle.textContent = 'Light Mode';
+                saveToLocalStorage('theme', 'dark');
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = loadFromLocalStorage('theme', 'light');
+        if (savedTheme === 'dark') {
+            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
+            themeToggle.textContent = 'Light Mode';
+        }
+
+        // Collapsible sections
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(section => {
+            section.querySelector('h2').addEventListener('click', () => {
+                section.classList.toggle('collapsed');
+            });
+        });
+
+        // Lazy load sections
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+
+        // Motivational quote API
+        async function fetchDailyQuote() {
+            const quoteContainer = document.getElementById('daily-quote');
+            const cachedQuote = loadFromLocalStorage('dailyQuote', null);
+            const today = new Date().toISOString().split('T')[0];
+
+            if (cachedQuote && cachedQuote.date === today) {
+                quoteContainer.innerHTML = `"${cachedQuote.text}" — ${cachedQuote.author || 'Unknown'}`;
+                return;
+            }
+
+            try {
+                const response = await fetch('https://type.fit/api/quotes');
+                const quotes = await response.json();
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteContainer.innerHTML = `"${randomQuote.text}" — ${randomQuote.author || 'Unknown'}`;
+                saveToLocalStorage('dailyQuote', { text: randomQuote.text, author: randomQuote.author, date: today });
+            } catch (error) {
+                console.error('Error fetching quote:', error);
+                quoteContainer.innerHTML = '"Stay strong, keep pushing!" — Bricks Gym';
+            }
+        }
+
+        // Helper function to show feedback
+        function showFeedback(button, show, state = 'loading') {
+            if (show) {
+                button.classList.add(state);
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading', 'success');
+                button.disabled = false;
+            }
+        }
+
+        // Initialize date inputs
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('session-date').value = today;
+        document.getElementById('goal-deadline').value = today;
+        document.getElementById('member-join').value = today;
+        document.getElementById('user-join').value = today;
+
+        // ================ DATA MANAGEMENT FUNCTIONS ================
+
+        // Generic function to render a table
+        function renderTable(tableId, data, columns, actions = true) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                // Add data columns
+                columns.forEach(col => {
+                    const cell = document.createElement('td');
+                    cell.textContent = item[col.key] || '-';
+                    row.appendChild(cell);
+                });
+                
+                // Add action buttons if needed
+                if (actions) {
+                    const actionCell = document.createElement('td');
+                    
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Edit';
+                    editBtn.className = 'action-btn edit-btn';
+                    editBtn.dataset.index = index;
+                    actionCell.appendChild(editBtn);
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'action-btn delete-btn';
+                    deleteBtn.dataset.index = index;
+                    actionCell.appendChild(deleteBtn);
+                    
+                    row.appendChild(actionCell);
+                }
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // User Profile Management
+        let users = loadFromLocalStorage('users', []);
+
+        function renderUserTable() {
+            renderTable('user-table-body', users, [
+                { key: 'name' },
+                { key: 'email' },
+                { key: 'goal' },
+                { key: 'joinDate' }
+            ]);
+            
+            document.querySelectorAll('#user-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const user = users[index];
+                    document.getElementById('user-name').value = user.name;
+                    document.getElementById('user-email').value = user.email;
+                    document.getElementById('user-goal').value = user.goal;
+                    document.getElementById('user-join').value = user.joinDate;
+                    const addBtn = document.getElementById('add-user-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#user-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    users.splice(index, 1);
+                    saveToLocalStorage('users', users);
+                    renderUserTable();
+                });
+            });
+        }
+
+        document.getElementById('add-user-btn').addEventListener('click', () => {
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            const goal = document.getElementById('user-goal').value;
+            const joinDate = document.getElementById('user-join').value;
+            
+            if (!name || !email || !joinDate) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-user-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                users[index] = { name, email, goal, joinDate };
+            } else {
+                users.push({ name, email, goal, joinDate });
+            }
+            
+            saveToLocalStorage('users', users);
+            renderUserTable();
+            
+            document.getElementById('user-form').reset();
+            document.getElementById('user-join').value = today;
+            addBtn.textContent = 'Save Profile';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Outdoor Exercises Management
+        let outdoorExercises = loadFromLocalStorage('outdoorExercises', []);
+
+        function renderOutdoorTable() {
+            renderTable('outdoor-table-body', outdoorExercises, [
+                { key: 'exercise' },
+                { key: 'duration' },
+                { key: 'calories' },
+                { key: 'date' }
+            ]);
+            
+            document.querySelectorAll('#outdoor-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const exercise = outdoorExercises[index];
+                    document.getElementById('outdoor-exercise').value = exercise.exercise;
+                    document.getElementById('outdoor-duration').value = exercise.duration;
+                    document.getElementById('outdoor-calories').value = exercise.calories;
+                    const addBtn = document.getElementById('add-outdoor-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#outdoor-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    outdoorExercises.splice(index, 1);
+                    saveToLocalStorage('outdoorExercises', outdoorExercises);
+                    renderOutdoorTable();
+                });
+            });
+        }
+
+        document.getElementById('add-outdoor-btn').addEventListener('click', () => {
+            const exercise = document.getElementById('outdoor-exercise').value;
+            const duration = document.getElementById('outdoor-duration').value;
+            const calories = document.getElementById('outdoor-calories').value;
+            const date = new Date().toISOString().split('T')[0];
+            
+            if (!exercise || !duration || !calories) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-outdoor-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                outdoorExercises[index] = { exercise, duration, calories, date };
+            } else {
+                outdoorExercises.push({ exercise, duration, calories, date });
+            }
+            
+            saveToLocalStorage('outdoorExercises', outdoorExercises);
+            renderOutdoorTable();
+            
+            document.getElementById('outdoor-exercise').value = '';
+            document.getElementById('outdoor-duration').value = '';
+            document.getElementById('outdoor-calories').value = '';
+            addBtn.textContent = 'Add';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Indoor Exercises Management
+        let indoorExercises = loadFromLocalStorage('indoorExercises', []);
+
+        function renderIndoorTable() {
+            renderTable('indoor-table-body', indoorExercises, [
+                { key: 'exercise' },
+                { key: 'reps' },
+                { key: 'sets' },
+                { key: 'calories' },
+                { key: 'date' }
+            ]);
+            
+            document.querySelectorAll('#indoor-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const exercise = indoorExercises[index];
+                    document.getElementById('indoor-exercise').value = exercise.exercise;
+                    document.getElementById('indoor-reps').value = exercise.reps;
+                    document.getElementById('indoor-sets').value = exercise.sets;
+                    document.getElementById('indoor-calories').value = exercise.calories;
+                    const addBtn = document.getElementById('add-indoor-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#indoor-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    indoorExercises.splice(index, 1);
+                    saveToLocalStorage('indoorExercises', indoorExercises);
+                    renderIndoorTable();
+                });
+            });
+        }
+
+        document.getElementById('add-indoor-btn').addEventListener('click', () => {
+            const exercise = document.getElementById('indoor-exercise').value;
+            const reps = document.getElementById('indoor-reps').value;
+            const sets = document.getElementById('indoor-sets').value;
+            const calories = document.getElementById('indoor-calories').value;
+            const date = new Date().toISOString().split('T')[0];
+            
+            if (!exercise || !reps || !sets || !calories) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-indoor-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                indoorExercises[index] = { exercise, reps, sets, calories, date };
+            } else {
+                indoorExercises.push({ exercise, reps, sets, calories, date });
+            }
+            
+            saveToLocalStorage('indoorExercises', indoorExercises);
+            renderIndoorTable();
+            
+            document.getElementById('indoor-exercise').value = '';
+            document.getElementById('indoor-reps').value = '';
+            document.getElementById('indoor-sets').value = '';
+            document.getElementById('indoor-calories').value = '';
+            addBtn.textContent = 'Add';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Gym Exercises Management
+        let gymExercises = loadFromLocalStorage('gymExercises', []);
+
+        function renderGymTable() {
+            renderTable('gym-table-body', gymExercises, [
+                { key: 'exercise' },
+                { key: 'reps' },
+                { key: 'sets' },
+                { key: 'calories' },
+                { key: 'date' }
+            ]);
+            
+            document.querySelectorAll('#gym-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const exercise = gymExercises[index];
+                    document.getElementById('gym-exercise').value = exercise.exercise;
+                    document.getElementById('gym-reps').value = exercise.reps;
+                    document.getElementById('gym-sets').value = exercise.sets;
+                    document.getElementById('gym-calories').value = exercise.calories;
+                    const addBtn = document.getElementById('add-gym-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#gym-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    gymExercises.splice(index, 1);
+                    saveToLocalStorage('gymExercises', gymExercises);
+                    renderGymTable();
+                });
+            });
+        }
+
+        document.getElementById('add-gym-btn').addEventListener('click', () => {
+            const exercise = document.getElementById('gym-exercise').value;
+            const reps = document.getElementById('gym-reps').value;
+            const sets = document.getElementById('gym-sets').value;
+            const calories = document.getElementById('gym-calories').value;
+            const date = new Date().toISOString().split('T')[0];
+            
+            if (!exercise || !reps || !sets || !calories) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-gym-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                gymExercises[index] = { exercise, reps, sets, calories, date };
+            } else {
+                gymExercises.push({ exercise, reps, sets, calories, date });
+            }
+            
+            saveToLocalStorage('gymExercises', gymExercises);
+            renderGymTable();
+            
+            document.getElementById('gym-exercise').value = '';
+            document.getElementById('gym-reps').value = '';
+            document.getElementById('gym-sets').value = '';
+            document.getElementById('gym-calories').value = '';
+            addBtn.textContent = 'Add';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Activities Management
+        let activities = loadFromLocalStorage('activities', []);
+
+        function renderActivityTable() {
+            renderTable('activity-table-body', activities, [
+                { key: 'activity' },
+                { key: 'duration' },
+                { key: 'calories' },
+                { key: 'date' }
+            ]);
+            
+            document.querySelectorAll('#activity-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const activity = activities[index];
+                    document.getElementById('activity').value = activity.activity;
+                    document.getElementById('activity-duration').value = activity.duration;
+                    document.getElementById('activity-calories').value = activity.calories;
+                    const addBtn = document.getElementById('add-activity-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#activity-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    activities.splice(index, 1);
+                    saveToLocalStorage('activities', activities);
+                    renderActivityTable();
+                });
+            });
+        }
+
+        document.getElementById('add-activity-btn').addEventListener('click', () => {
+            const activity = document.getElementById('activity').value;
+            const duration = document.getElementById('activity-duration').value;
+            const calories = document.getElementById('activity-calories').value;
+            const date = new Date().toISOString().split('T')[0];
+            
+            if (!activity || !duration || !calories) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-activity-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                activities[index] = { activity, duration, calories, date };
+            } else {
+                activities.push({ activity, duration, calories, date });
+            }
+            
+            saveToLocalStorage('activities', activities);
+            renderActivityTable();
+            
+            document.getElementById('activity').value = '';
+            document.getElementById('activity-duration').value = '';
+            document.getElementById('activity-calories').value = '';
+            addBtn.textContent = 'Add';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Diet Tracker Management
+        let dietEntries = loadFromLocalStorage('dietEntries', []);
+
+        function renderDietTable() {
+            renderTable('diet-table-body', dietEntries, [
+                { key: 'mealType' },
+                { key: 'description' },
+                { key: 'calories' },
+                { key: 'date' }
+            ]);
+            
+            document.querySelectorAll('#diet-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const entry = dietEntries[index];
+                    document.getElementById('meal-type').value = entry.mealType;
+                    document.getElementById('meal-description').value = entry.description;
+                    document.getElementById('meal-calories').value = entry.calories;
+                    const addBtn = document.getElementById('add-diet-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#diet-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    dietEntries.splice(index, 1);
+                    saveToLocalStorage('dietEntries', dietEntries);
+                    renderDietTable();
+                });
+            });
+        }
+
+        document.getElementById('add-diet-btn').addEventListener('click', () => {
+            const mealType = document.getElementById('meal-type').value;
+            const description = document.getElementById('meal-description').value;
+            const calories = document.getElementById('meal-calories').value;
+            const date = new Date().toISOString().split('T')[0];
+            
+            if (!mealType || !calories) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            const addBtn = document.getElementById('add-diet-btn');
+            if (addBtn.textContent === 'Update' && addBtn.dataset.index) {
+                const index = addBtn.dataset.index;
+                dietEntries[index] = { mealType, description, calories, date };
+            } else {
+                dietEntries.push({ mealType, description, calories, date });
+            }
+            
+            saveToLocalStorage('dietEntries', dietEntries);
+            renderDietTable();
+            
+            document.getElementById('meal-type').value = '';
+            document.getElementById('meal-description').value = '';
+            document.getElementById('meal-calories').value = '';
+            addBtn.textContent = 'Add';
+            delete addBtn.dataset.index;
+            
+            showFeedback(addBtn, true, 'success');
+            setTimeout(() => showFeedback(addBtn, false), 1000);
+        });
+
+        // Gym Management: Schedule Management
+        let schedules = loadFromLocalStorage('schedules', []);
+
+        function renderScheduleTable() {
+            renderTable('schedule-table-body', schedules, [
+                { key: 'date' },
+                { key: 'time' }
+            ]);
+            
+            document.querySelectorAll('#schedule-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const schedule = schedules[index];
+                    document.getElementById('session-date').value = schedule.date;
+                    document.getElementById('session-time').value = schedule.time;
+                    const addBtn = document.getElementById('schedule-session-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#schedule-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    schedules.splice(index, 1);
+                    saveToLocalStorage('schedules', schedules);
+                    renderScheduleTable();
+                });
+            });
+        }
+
+        document.getElementById('schedule-session-btn').addEventListener('click', () => {
+            const date = document.getElementById('session-date').value;
+            const time = document.getElementById('session-time').value;
+            
+            if (!date || !time) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const scheduleBtn = document.getElementById('schedule-session-btn');
+            if (scheduleBtn.textContent === 'Update' && scheduleBtn.dataset.index) {
+                const index = scheduleBtn.dataset.index;
+                schedules[index] = { date, time };
+            } else {
+                schedules.push({ date, time });
+            }
+            
+            saveToLocalStorage('schedules', schedules);
+            renderScheduleTable();
+            
+            document.getElementById('session-date').value = today;
+            document.getElementById('session-time').value = '';
+            scheduleBtn.textContent = 'Schedule';
+            delete scheduleBtn.dataset.index;
+            
+            showFeedback(scheduleBtn, true, 'success');
+            setTimeout(() => showFeedback(scheduleBtn, false), 1000);
+        });
+
+        // Gym Management: Fitness Goals
+        let goals = loadFromLocalStorage('goals', []);
+
+        function renderGoalTable() {
+            renderTable('goal-table-body', goals, [
+                { key: 'description' },
+                { key: 'deadline' }
+            ]);
+            
+            document.querySelectorAll('#goal-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const goal = goals[index];
+                    document.getElementById('goal-description').value = goal.description;
+                    document.getElementById('goal-deadline').value = goal.deadline;
+                    const goalBtn = document.getElementById('set-goal-btn');
+                    goalBtn.textContent = 'Update';
+                    goalBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#goal-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    goals.splice(index, 1);
+                    saveToLocalStorage('goals', goals);
+                    renderGoalTable();
+                });
+            });
+        }
+
+        document.getElementById('set-goal-btn').addEventListener('click', () => {
+            const description = document.getElementById('goal-description').value;
+            const deadline = document.getElementById('goal-deadline').value;
+            
+            if (!description || !deadline) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            const goalBtn = document.getElementById('set-goal-btn');
+            if (goalBtn.textContent === 'Update' && goalBtn.dataset.index) {
+                const index = goalBtn.dataset.index;
+                goals[index] = { description, deadline };
+            } else {
+                goals.push({ description, deadline });
+            }
+            
+            saveToLocalStorage('goals', goals);
+            renderGoalTable();
+            
+            document.getElementById('goal-description').value = '';
+            document.getElementById('goal-deadline').value = today;
+            goalBtn.textContent = 'Set Goal';
+            delete goalBtn.dataset.index;
+            
+            showFeedback(goalBtn, true, 'success');
+            setTimeout(() => showFeedback(goalBtn, false), 1000);
+        });
+
+        // Gym Management: Member Management
+        let members = loadFromLocalStorage('members', []);
+
+        function renderMemberTable() {
+            renderTable('member-table-body', members, [
+                { key: 'name' },
+                { key: 'email' },
+                { key: 'phone' },
+                { key: 'joinDate' },
+                { key: 'status' }
+            ]);
+            
+            document.querySelectorAll('#member-table-body tr').forEach(row => {
+                const index = row.querySelector('.edit-btn').dataset.index;
+                if (members[index].status === 'Inactive') {
+                    row.classList.add('inactive-member');
+                }
+            });
+            
+            document.querySelectorAll('#member-table-body .edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const member = members[index];
+                    document.getElementById('member-name').value = member.name;
+                    document.getElementById('member-email').value = member.email;
+                    document.getElementById('member-phone').value = member.phone;
+                    document.getElementById('member-join').value = member.joinDate;
+                    document.getElementById('member-status').value = member.status;
+                    const addBtn = document.getElementById('add-member-btn');
+                    addBtn.textContent = 'Update';
+                    addBtn.dataset.index = index;
+                });
+            });
+            
+            document.querySelectorAll('#member-table-body .delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    members.splice(index, 1);
+                    saveToLocalStorage('members', members);
+                    renderMemberTable();
+                });
+            });
+        }
+
+        document.getElementById('add-member-btn').addEventListener('click', () => {
+            const name = document.getElementById('member-name').value;
+            const email = document.getElementById('member-email').value;
+            const phone = document.getElementById('member-phone').value;
+            const joinDate = document.getElementById('member-join').value;
+            const status = document.getElementById('member-status').value;
+            
+            if (!name || !email || !joinDate) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            const memberBtn = document.getElementById('add-member-btn');
+            if (memberBtn.textContent === 'Update' && memberBtn.dataset.index) {
+                const index = memberBtn.dataset.index;
+                members[index] = { name, email, phone, joinDate, status };
+            } else {
+                members.push({ name, email, phone, joinDate, status });
+            }
+            
+            saveToLocalStorage('members', members);
+            renderMemberTable();
+            
+            document.getElementById('member-form').reset();
+            document.getElementById('member-join').value = today;
+            memberBtn.textContent = 'Add Member';
+            delete memberBtn.dataset.index;
+            
+            showFeedback(memberBtn, true, 'success');
+            setTimeout(() => showFeedback(memberBtn, false), 1000);
+        });
+
+        // Logout Functionality
+        document.getElementById('logout').addEventListener('click', () => {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear authentication data
+                localStorage.removeItem('auth');
+                alert('Logged out successfully.');
+                window.location.href = 'index.html'; // Redirect to login page
+            }
+        });
+
+        // Initialize all tables and fetch quote
+        renderUserTable();
+        renderOutdoorTable();
+        renderIndoorTable();
+        renderGymTable();
+        renderActivityTable();
+        renderDietTable();
+        renderScheduleTable();
+        renderGoalTable();
+        renderMemberTable();
+        fetchDailyQuote();
+    </script>
+</body>
+</html>
