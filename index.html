@@ -668,6 +668,46 @@
                 height: 18px;
             }
         }
+
+        /* CSS remains mostly the same, with these additions: */
+        
+        /* Add smooth fade-in for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        body {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Enhanced loading spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-red);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* More fluid animations */
+        * {
+            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* Success message styling */
+        .success {
+            color: #27ae60;
+            background-color: rgba(39, 174, 96, 0.1);
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -769,16 +809,16 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script>
-        // Firebase configuration
+                // Fixed Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyAdBhU3fPl4aKV_y4PkrUX30hW1N2kSPnPx",
-            authDomain: "bricksgymmanagementsystem.firebaseapp.com",
-            projectId: "bricksgymmanagementsystem",
-            storageBucket: "bricksgymmanagementsystem.appspot.com",
-            messagingSenderId: "184509603709",
-            appId: "1:184509603709:web:3f9e8f9b9d9e8f9b9d9e8f",
-            measurementId: "G-3SPS6F9XG9"
-        };
+  apiKey: "AIzaSyAdbh13wPl4aKV_y4PkrUX30hN1kSPnPxE",
+  authDomain: "bricksgymmanagementsystem.firebaseapp.com",
+  projectId: "bricksgymmanagementsystem",
+  storageBucket: "bricksgymmanagementsystem.firebasestorage.app",
+  messagingSenderId: "184009603704",
+  appId: "1:184009603704:web:cbc41402a7c3ef1e3c4b8d",
+  measurementId: "G-SPS6F9XG9J"
+};
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -796,7 +836,13 @@
         const forgotPasswordForm = document.getElementById('forgot-password-form');
         const googleLoginButton = document.getElementById('google-login-btn');
         const anonymousLoginButton = document.getElementById('anonymous-login-btn');
+        const motivationalQuote = document.querySelector('.motivational-quote');
         let isRedirecting = false;
+        
+        // Create spinner element
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        document.body.appendChild(spinner);
 
         // Cache user data to reduce Firestore reads
         const userCache = new Map();
@@ -806,7 +852,9 @@
             const errorElement = document.getElementById(elementId);
             if (errorElement) {
                 errorElement.textContent = message;
+                errorElement.className = isSuccess ? 'success' : 'error';
                 errorElement.style.display = 'block';
+                
                 if (!isSuccess) {
                     authContainer.classList.add('shake');
                     setTimeout(() => authContainer.classList.remove('shake'), 500);
@@ -824,14 +872,15 @@
                 'auth/weak-password': 'Password is too weak. Please use at least 6 characters.',
                 'auth/too-many-requests': 'Too many login attempts. Please try again later.',
                 'auth/popup-closed-by-user': 'Google login popup window closed.',
-                'auth/cancelled-popup-request': 'Login popup cancelled.'
+                'auth/cancelled-popup-request': 'Login popup cancelled.',
+                'auth/network-request-failed': 'Network error. Please check your connection.'
             };
             return errorMap[error.code] || `An error occurred: ${error.message}`;
         }
 
         // Handle theme toggle
         function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme');
+            const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark');
                 themeToggle.textContent = '☀️';
@@ -882,7 +931,7 @@
 
         // Clear all error messages
         function clearErrors() {
-            document.querySelectorAll('.error').forEach(error => {
+            document.querySelectorAll('.error, .success').forEach(error => {
                 error.style.display = 'none';
                 error.textContent = '';
             });
@@ -952,42 +1001,64 @@
         }
 
         // Manage button loading state
-        function setButtonLoading(button, isLoading, originalText) {
-            button.disabled = isLoading;
-            button.textContent = isLoading ? 'Processing...' : originalText;
+        function setButtonLoading(button, isLoading) {
+            if (isLoading) {
+                button.disabled = true;
+                button.style.opacity = '0.8';
+                button.style.cursor = 'not-allowed';
+                spinner.style.display = 'block';
+            } else {
+                button.disabled = false;
+                button.style.opacity = '1';
+                button.style.cursor = 'pointer';
+                spinner.style.display = 'none';
+            }
         }
 
         // Redirect user based on gender
         async function redirectUser(user, initialGender = null) {
             if (isRedirecting) return;
             isRedirecting = true;
+            spinner.style.display = 'block';
 
             try {
                 let userGender = userCache.get(user.uid)?.gender;
+                
+                // Try to get user data from Firestore
                 if (!userGender) {
                     const userDocRef = db.collection('users').doc(user.uid);
                     const docSnap = await userDocRef.get();
+                    
                     if (docSnap.exists) {
                         userGender = docSnap.data().gender;
                         userCache.set(user.uid, { gender: userGender });
                     }
                 }
 
+                // If no gender exists but we have initial gender, set it
                 if (!userGender && initialGender) {
-                    const userDocRef = db.collection('users').doc(user.uid);
-                    await userDocRef.set({
-                        name: user.displayName || 'Gym Member',
-                        email: user.email,
-                        gender: initialGender,
-                        role: 'member',
-                        membershipStatus: 'trial',
-                        workoutPreferences: [],
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                    userGender = initialGender;
-                    userCache.set(user.uid, { gender: userGender });
+                    try {
+                        const userDocRef = db.collection('users').doc(user.uid);
+                        await userDocRef.set({
+                            name: user.displayName || 'Gym Member',
+                            email: user.email,
+                            gender: initialGender,
+                            role: 'member',
+                            membershipStatus: 'trial',
+                            workoutPreferences: [],
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                        
+                        userGender = initialGender;
+                        userCache.set(user.uid, { gender: userGender });
+                    } catch (error) {
+                        console.error('Firestore write error:', error);
+                        displayError('login-error', 'Failed to save user data. Please try again.');
+                        return;
+                    }
                 }
 
+                // Redirect based on gender
                 if (userGender === 'male') {
                     window.location.href = '/dashboard-male.html';
                 } else if (userGender === 'female') {
@@ -996,14 +1067,13 @@
                     window.location.href = '/dashboard-guest.html';
                 } else {
                     displayError('login-error', 'Please select a category to proceed.');
-                    isRedirecting = false;
-                    return;
                 }
             } catch (error) {
-                console.error('Error redirecting user:', error);
+                console.error('Redirect error:', error);
                 displayError('login-error', 'An error occurred during redirection.');
             } finally {
                 isRedirecting = false;
+                spinner.style.display = 'none';
             }
         }
 
@@ -1014,14 +1084,13 @@
             const password = document.getElementById('login-password').value;
             const gender = document.getElementById('login-gender').value;
             const loginButton = loginForm.querySelector('button[type="submit"]');
-            const originalText = loginButton.textContent;
 
             if (!gender) {
                 displayError('login-error', 'Please select a category.');
                 return;
             }
 
-            setButtonLoading(loginButton, true, originalText);
+            setButtonLoading(loginButton, true);
 
             try {
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
@@ -1030,7 +1099,7 @@
             } catch (error) {
                 displayError('login-error', getFriendlyErrorMessage(error));
             } finally {
-                setButtonLoading(loginButton, false, originalText);
+                setButtonLoading(loginButton, false);
             }
         });
 
@@ -1042,14 +1111,13 @@
             const password = document.getElementById('register-password').value;
             const gender = document.getElementById('register-gender').value;
             const registerButton = registerForm.querySelector('button[type="submit"]');
-            const originalText = registerButton.textContent;
 
             if (!gender) {
                 displayError('register-error', 'Please select a category.');
                 return;
             }
 
-            setButtonLoading(registerButton, true, originalText);
+            setButtonLoading(registerButton, true);
 
             try {
                 const userCredential = await auth.createUserWithEmailAndPassword(email, password);
@@ -1059,7 +1127,7 @@
             } catch (error) {
                 displayError('register-error', getFriendlyErrorMessage(error));
             } finally {
-                setButtonLoading(registerButton, false, originalText);
+                setButtonLoading(registerButton, false);
             }
         });
 
@@ -1068,9 +1136,8 @@
             e.preventDefault();
             const email = document.getElementById('forgot-email').value;
             const resetButton = forgotPasswordForm.querySelector('button[type="submit"]');
-            const originalText = resetButton.textContent;
 
-            setButtonLoading(resetButton, true, originalText);
+            setButtonLoading(resetButton, true);
 
             try {
                 await auth.sendPasswordResetEmail(email);
@@ -1078,13 +1145,13 @@
             } catch (error) {
                 displayError('forgot-error', getFriendlyErrorMessage(error));
             } finally {
-                setButtonLoading(resetButton, false, originalText);
+                setButtonLoading(resetButton, false);
             }
         });
 
         // Handle Google login
         googleLoginButton.addEventListener('click', async () => {
-            setButtonLoading(googleLoginButton, true, 'Log in with Google');
+            setButtonLoading(googleLoginButton, true);
             try {
                 const result = await auth.signInWithPopup(provider);
                 const user = result.user;
@@ -1092,13 +1159,13 @@
             } catch (error) {
                 displayError('login-error', getFriendlyErrorMessage(error));
             } finally {
-                setButtonLoading(googleLoginButton, false, 'Log in with Google');
+                setButtonLoading(googleLoginButton, false);
             }
         });
 
         // Handle anonymous login
         anonymousLoginButton.addEventListener('click', async () => {
-            setButtonLoading(anonymousLoginButton, true, 'Try as guest login');
+            setButtonLoading(anonymousLoginButton, true);
             try {
                 const userCredential = await auth.signInAnonymously();
                 const user = userCredential.user;
@@ -1106,22 +1173,70 @@
             } catch (error) {
                 displayError('login-error', getFriendlyErrorMessage(error));
             } finally {
-                setButtonLoading(anonymousLoginButton, false, 'Try as guest login');
+                setButtonLoading(anonymousLoginButton, false);
             }
         });
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize components
             initializeTheme();
             initializeTabs();
             setupInputValidation();
             setupPasswordToggle('login-password-toggle', 'login-password');
             setupPasswordToggle('register-password-toggle', 'register-password');
+            
+            // Preload Firebase SDKs
+            await Promise.all([
+                new Promise(resolve => {
+                    if (firebase.apps.length) return resolve();
+                    const script = document.createElement('script');
+                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js';
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                }),
+                new Promise(resolve => {
+                    const script = document.createElement('script');
+                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js';
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                }),
+                new Promise(resolve => {
+                    const script = document.createElement('script');
+                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js';
+                    script.onload = resolve;
+                    document.head.appendChild(script);
+                })
+            ]);
+            
+            // Set up auth state listener
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
                     await redirectUser(user);
                 }
             });
+            
+            // Rotate motivational quotes
+            const quotes = [
+                "Strength does not come from what you can do. It comes from overcoming the things you once thought you could not do.",
+                "The body achieves what the mind believes.",
+                "Success starts with self-discipline.",
+                "The only bad workout is the one that didn't happen.",
+                "Your body can stand almost anything. It's your mind you have to convince."
+            ];
+            
+            let quoteIndex = 0;
+            motivationalQuote.textContent = `"${quotes[quoteIndex]}"`;
+            
+            setInterval(() => {
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                motivationalQuote.style.opacity = 0;
+                
+                setTimeout(() => {
+                    motivationalQuote.textContent = `"${quotes[quoteIndex]}"`;
+                    motivationalQuote.style.opacity = 1;
+                }, 500);
+            }, 8000);
         });
     </script>
 </body>
