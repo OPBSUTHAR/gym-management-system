@@ -1238,6 +1238,47 @@
                 }, 500);
             }, 8000);
         });
+
+        // logout automatically after when user exit browser
+        window.addEventListener('beforeunload', () => {
+            if (auth.currentUser) {
+                auth.signOut().catch(error => {
+                    console.error('Sign out error:', error);
+                });
+            }
+        });
+
+        // Initialize theme and tabs
+        initializeTheme();
+        initializeTabs();
+        setupInputValidation();
+        setupPasswordToggle('login-password-toggle', 'login-password');
+        setupPasswordToggle('register-password-toggle', 'register-password');
+
+        // Add keyboard navigation for tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const nextTab = tab.nextElementSibling || tabs[0];
+                    nextTab.focus();
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevTab = tab.previousElementSibling || tabs[tabs.length - 1];
+                    prevTab.focus();
+                }
+            });
+        });
+
+        // Add focus styles for better accessibility
+        document.querySelectorAll('input, select, button').forEach(element => {
+            element.addEventListener('focus', () => {
+                element.style.outline = '2px solid var(--primary-red)';
+            });
+            element.addEventListener('blur', () => {
+                element.style.outline = 'none';
+            });
+        });
     </script>
 </body>
 </html>
