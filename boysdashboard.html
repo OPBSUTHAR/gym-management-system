@@ -1600,10 +1600,8 @@
         // Logout Functionality
         document.getElementById('logout').addEventListener('click', () => {
             if (confirm('Are you sure you want to logout?')) {
-                // Clear authentication data
-                localStorage.removeItem('auth');
-                alert('Logged out successfully.');
-                window.location.href = 'index.html'; // Redirect to login page
+                // Redirect to index.html to handle Firebase sign-out
+                window.location.href = 'index.html?logout=true';
             }
         });
 

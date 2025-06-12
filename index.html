@@ -2,26 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bricks Gym - Forge Your Strength</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-red: #c0392b;
-            --primary-red-dark: #a53024;
-            --secondary-red: #e74c3c;
-            --light-bg: #f5f5f5;
-            --light-bg-secondary: #e0e0e0;
+            --primary-blue: #1e90ff;
+            --primary-purple: #8b5cf6;
+            --secondary-blue: #3b82f6;
+            --light-bg: #f0f2f5;
+            --light-bg-secondary: #e6e9ef;
             --dark-bg: #1a1a1a;
             --dark-bg-secondary: #2c2c2c;
-            --text-light: #333;
-            --text-dark: #ddd;
-            --border-light: #ddd;
-            --border-dark: #555;
+            --text-light: #333333;
+            --text-dark: #e0e0e0;
+            --border-light: #d1d5db;
+            --border-dark: #4b5563;
             --white: #ffffff;
-            --google-blue: #4285f4;
-            --google-blue-dark: #3267d6;
-            --error-color: #e74c3c;
+            --error-color: #dc2626;
+            --success-color: #16a34a;
             --header-height: 80px;
         }
 
@@ -30,95 +29,44 @@
             --light-bg-secondary: var(--dark-bg-secondary);
             --text-light: var(--text-dark);
             --border-light: var(--border-dark);
-            --primary-red: var(--secondary-red);
-            --primary-red-dark: var(--primary-red);
-            --secondary-red: var(--primary-red-dark);
-            --header-gradient-start: #a53024;
-            --header-gradient-end: #c0392b;
+            --primary-blue: #60a5fa;
+            --primary-purple: #a78bfa;
+            --secondary-blue: #93c5fd;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--light-bg) 0%, var(--light-bg-secondary) 100%);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             color: var(--text-light);
+            position: relative;
+            overflow-x: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/brick-wall.png');
-            opacity: 0.1;
-            z-index: 0;
-            will-change: opacity;
-            animation: brickPulse 12s ease-in-out infinite;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
-        }
-
-        body.dark::before {
-            background: url('https://www.transparenttextures.com/patterns/brick-wall-dark.png');
-            opacity: 0.15;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
-        }
-
-        @keyframes brickPulse {
-            0% { opacity: 0.1; }
-            50% { opacity: 0.15; }
-            100% { opacity: 0.1; }
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300px;
-            height: 300px;
-            background: url('https://img.icons8.com/ios-filled/50/c0392b/barbell.png') no-repeat center;
-            background-size: 120px;
-            opacity: 0.08;
-            transform: translate(-50%, -50%);
-            animation: liftBarbell 15s ease-in-out infinite;
-            will-change: transform;
-        }
-
-        body.dark::after {
-            background: url('https://img.icons8.com/ios-filled/50/ffffff/barbell.png') no-repeat center;
-            opacity: 0.12;
-        }
-
-        @keyframes liftBarbell {
-            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-            50% { transform: translate(-50%, -50%) rotate(3deg) scale(1.03); }
-            100% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         header {
-            background: linear-gradient(90deg, var(--primary-red), var(--secondary-red));
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
             color: var(--white);
             padding: 15px 30px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 10;
+            z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -126,24 +74,15 @@
         }
 
         body.dark header {
-            background: linear-gradient(90deg, var(--header-gradient-start), var(--header-gradient-end));
-            box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
         }
 
         header h1 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: 3px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.8rem, 5vw, 2.2rem);
+            font-weight: 600;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            animation: glowText 2s ease-in-out infinite;
-            text-shadow: 0 0 8px rgba(255,255,255,0.5);
-        }
-
-        @keyframes glowText {
-            0% { text-shadow: 0 0 4px rgba(255,255,255,0.5), 0 0 8px var(--secondary-red); }
-            50% { text-shadow: 0 0 12px rgba(255,255,255,0.7), 0 0 16px var(--primary-red); }
-            100% { text-shadow: 0 0 4px rgba(255,255,255,0.5), 0 0 8px var(--secondary-red); }
         }
 
         .theme-toggle {
@@ -152,14 +91,14 @@
             color: var(--white);
             font-size: 1.5rem;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-            padding: 5px;
+            padding: 8px;
             border-radius: 50%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .theme-toggle:hover {
-            transform: rotate(20deg) scale(1.1);
-            color: rgba(255,255,255,0.8);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
         }
 
         .theme-toggle:focus {
@@ -168,31 +107,23 @@
         }
 
         .motivational-quote {
-            position: relative;
             margin: calc(var(--header-height) + 20px) auto 20px;
-            background: rgba(192, 57, 43, 0.15);
-            color: var(--primary-red);
-            padding: 10px 20px;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: 12px;
             font-style: italic;
-            font-size: 1.2rem;
-            opacity: 0;
-            animation: fadeInQuote 3s ease forwards;
-            z-index: 1;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            max-width: 90%;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
             text-align: center;
-        }
-
-        body.dark .motivational-quote {
-            background: rgba(231, 76, 60, 0.15);
-            color: var(--secondary-red);
-            text-shadow: 0 1px 2px rgba(255,255,255,0.1);
+            max-width: 90%;
+            opacity: 0;
+            animation: fadeInQuote 1.5s ease-in-out forwards;
+            transition: opacity 0.5s ease-in-out;
         }
 
         @keyframes fadeInQuote {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         main {
@@ -201,104 +132,84 @@
             justify-content: center;
             align-items: flex-start;
             padding: calc(var(--header-height) + 20px) 15px 20px;
-            min-height: calc(100vh - var(--header-height) - 60px);
+            min-height: calc(100vh - var(--header-height));
             position: relative;
-            z-index: 2;
+            z-index: 10;
         }
 
         .auth-container {
-            background: rgba(255, 255, 255, 0.98);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.95);
+            padding: clamp(20px, 5vw, 30px);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             width: 100%;
             max-width: 450px;
-            -webkit-backdrop-filter: blur(6px);
-            backdrop-filter: blur(6px);
-            animation: liftUp 1s ease;
-            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(4px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         body.dark .auth-container {
-            background: rgba(42, 42, 42, 0.98);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(0,0,0,0.5);
-        }
-
-        @keyframes liftUp {
-            0% { transform: translateY(30px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            background: rgba(42, 42, 42, 0.95);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .tabs {
             display: flex;
             justify-content: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--border-light);
-            gap: 10px;
+            margin-bottom: 20px;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-light);
         }
 
         body.dark .tabs {
-            border-bottom: 2px solid var(--border-dark);
+            border-bottom: 1px solid var(--border-dark);
         }
 
         .tab {
             background: var(--light-bg-secondary);
-            color: #666;
+            color: var(--text-light);
             padding: 10px 20px;
             border-radius: 8px 8px 0 0;
             cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            font-weight: 500;
             border: 1px solid var(--border-light);
             border-bottom: none;
-            user-select: none;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
         }
 
         body.dark .tab {
-            background: #3a3a3a;
-            color: #aaa;
+            background: var(--dark-bg-secondary);
             border: 1px solid var(--border-dark);
-            border-bottom: none;
         }
 
         .tab.active {
-            background: var(--primary-red);
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
             color: var(--white);
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-            border-color: var(--primary-red);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
         }
 
         body.dark .tab.active {
-            background: var(--secondary-red);
-            border-color: var(--secondary-red);
-            box-shadow: 0 -2px 6px rgba(255,255,255,0.1);
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            border-color: var(--primary-purple);
         }
 
         .tab:hover:not(.active) {
-            background: #d0d0d0;
-            color: #333;
+            background: var(--light-bg);
             transform: translateY(-1px);
         }
 
         body.dark .tab:hover:not(.active) {
-            background: #4a4a4a;
-            color: #ddd;
+            background: var(--dark-bg);
         }
 
         .tab:focus {
-            outline: 2px solid var(--primary-red);
+            outline: 2px solid var(--primary-blue);
             outline-offset: 2px;
-        }
-
-        body.dark .tab:focus {
-            outline: 2px solid var(--secondary-red);
         }
 
         .tab-content {
             display: none;
-            padding-top: 15px;
         }
 
         .tab-content.active {
@@ -309,10 +220,9 @@
             text-align: center;
             color: var(--text-light);
             margin-bottom: 20px;
-            font-size: 1.8rem;
-            font-weight: 700;
-            font-family: 'Oswald', sans-serif;
-            text-transform: uppercase;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body.dark h2 {
@@ -326,8 +236,8 @@
 
         .category-label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
+            margin-bottom: 8px;
+            font-weight: 500;
             color: var(--text-light);
             font-size: 0.9rem;
         }
@@ -337,8 +247,8 @@
         }
 
         .input-group {
-            position: relative;
             margin-bottom: 15px;
+            position: relative;
         }
 
         input, select {
@@ -347,41 +257,39 @@
             border: 1px solid var(--border-light);
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
-            background: var(--light-bg);
+            background: var(--white);
             color: var(--text-light);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         body.dark input, body.dark select {
-            background: #3a3a3a;
+            background: var(--dark-bg-secondary);
             border-color: var(--border-dark);
             color: var(--text-dark);
         }
 
         input:focus, select:focus {
-            border-color: var(--primary-red);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 6px rgba(30, 144, 255, 0.3);
             outline: none;
-            box-shadow: 0 0 8px rgba(192, 57, 43, 0.3);
-            transform: translateY(-1px);
         }
 
         body.dark input:focus, body.dark select:focus {
-            border-color: var(--secondary-red);
-            box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 6px rgba(139, 92, 246, 0.3);
         }
 
         input[readonly] {
-            background: #e0e0e0;
+            background: var(--light-bg-secondary);
             cursor: not-allowed;
         }
 
         body.dark input[readonly] {
-            background: #4a4a4a;
+            background: var(--dark-bg-secondary);
         }
 
         select {
             appearance: none;
-            -webkit-appearance: none;
             background-image: url('data:image/svg+xml;utf8,<svg fill="%23333333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
             background-repeat: no-repeat;
             background-position: right 10px center;
@@ -389,7 +297,7 @@
         }
 
         body.dark select {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23dddddd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23e0e0e0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
         }
 
         .show-password {
@@ -398,127 +306,103 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #666;
+            color: var(--text-light);
             font-size: 0.85rem;
-            font-weight: 600;
-            user-select: none;
+            font-weight: 500;
         }
 
         body.dark .show-password {
-            color: #aaa;
+            color: var(--text-dark);
         }
 
         button {
-            background: linear-gradient(45deg, var(--primary-red), var(--secondary-red));
-            color: white;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            color: var(--white);
             padding: 12px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: 700;
-            transition: background 0.3s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.3s ease-in-out;
+            font-weight: 600;
             margin-top: 12px;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
         }
 
         body.dark button {
-            background: linear-gradient(45deg, var(--secondary-red), var(--primary-red));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
         }
 
         button:disabled {
-            background: #ccc;
+            background: var(--border-light);
             cursor: not-allowed;
-            transform: none;
             box-shadow: none;
         }
 
         body.dark button:disabled {
-            background: #555;
-        }
-
-        button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-            opacity: 0;
-        }
-
-        button:active:not(:disabled)::after {
-            width: 200px;
-            height: 200px;
-            opacity: 1;
+            background: var(--border-dark);
         }
 
         button:hover:not(:disabled) {
-            background: linear-gradient(45deg, var(--primary-red-dark), var(--secondary-red));
+            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue));
+            box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3);
             transform: translateY(-1px);
-            box-shadow: 0 6px 15px rgba(192, 57, 43, 0.4);
-        }
-
-        body.dark button:hover:not(:disabled) {
-            background: linear-gradient(45deg, var(--primary-red), var(--secondary-red));
-            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
         }
 
         .google-login, .anonymous-login {
-            background: linear-gradient(45deg, var(--google-blue), var(--google-blue-dark));
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             margin-top: 15px;
-            padding: 10px;
-            font-size: 0.95rem;
+            padding: 12px;
         }
 
         body.dark .google-login, body.dark .anonymous-login {
-            background: linear-gradient(45deg, var(--google-blue-dark), var(--google-blue));
+            background: linear-gradient(45deg, #1d4ed8, #3b82f6);
         }
 
         .anonymous-login {
-            background: linear-gradient(45deg, #7f8c8d, #95a5a6);
+            background: linear-gradient(45deg, #6b7280, #4b5563);
         }
 
         body.dark .anonymous-login {
-            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            background: linear-gradient(45deg, #4b5563, #6b7280);
         }
 
         .google-login:hover:not(:disabled), .anonymous-login:hover:not(:disabled) {
-            background: linear-gradient(45deg, var(--google-blue-dark), var(--google-blue));
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
             transform: translateY(-1px);
-            box-shadow: 0 5px 12px rgba(66, 133, 244, 0.4);
         }
 
-        body.dark .google-login:hover:not(:disabled), body.dark .anonymous-login:hover:not(:disabled) {
-            background: linear-gradient(45deg, var(--google-blue), var(--google-blue-dark));
-        }
-
-        .google-login img {
+        .google-login svg {
             width: 20px;
             height: 20px;
         }
 
         .error {
             color: var(--error-color);
+            background: rgba(220, 38, 38, 0.1);
             text-align: center;
             margin: 12px 0;
             font-size: 0.9rem;
-            font-weight: bold 600;
+            font-weight: 500;
+            padding: 8px;
+            border-radius: 6px;
             display: none;
-            padding: 6px;
-            background-color: rgba(231, 76, 60, 0.1);
-            border-radius: 5px;
+        }
+
+        .success {
+            color: var(--success-color);
+            background: rgba(22, 163, 74, 0.1);
+            text-align: center;
+            margin: 12px 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 8px;
+            border-radius: 6px;
+            display: none;
         }
 
         .shake {
@@ -527,45 +411,52 @@
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
-            20%, 40%, 60%, 80% { transform: translateX(6px); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
         }
 
         footer {
-            background: linear-gradient(90deg, #333, #444);
-            color: white;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            color: var(--white);
             text-align: center;
             padding: 15px;
             font-size: 0.9rem;
             position: relative;
-            z-index: 1;
-            box-shadow: 0 -4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
         }
 
         body.dark footer {
-            background: linear-gradient(90deg, #222, #333);
-            box-shadow: 0 -4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
         }
 
-        html {
-            scroll-behavior: smooth;
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-blue);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+            display: none;
         }
 
-        /* Responsive Design */
+        body.dark .spinner {
+            border-left-color: var(--primary-purple);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 1024px) {
             header h1 {
-                font-size: 2.2rem;
-                letter-spacing: 2px;
+                font-size: clamp(1.6rem, 4vw, 2rem);
             }
-
             .motivational-quote {
-                font-size: 1.1rem;
-                padding: 8px 15px;
-                margin: calc(var(--header-height) + 15px) auto 15px;
+                font-size: clamp(0.85rem, 2.5vw, 1rem);
+                padding: 10px 15px;
             }
-
             .auth-container {
-                padding: 25px;
                 max-width: 400px;
             }
         }
@@ -574,146 +465,43 @@
             :root {
                 --header-height: 60px;
             }
-
             header {
                 padding: 10px 20px;
             }
-
-            header h1 {
-                font-size: 2rem;
-                letter-spacing: 1.5px;
-            }
-
-            .motivational-quote {
-                font-size: 1rem;
-                padding: 6px 12px;
-                margin: calc(var(--header-height) + 10px) auto 10px;
-            }
-
             main {
                 padding: calc(var(--header-height) + 10px) 15px 20px;
-                min-height: calc(100vh - var(--header-height) - 30px);
             }
-
-            .auth-container {
-                padding: 20px;
-                max-width: 90%;
-            }
-
             .tabs {
                 flex-direction: column;
-                align-items: stretch;
                 border-bottom: none;
-                gap: 5px;
             }
-
             .tab {
-                border: 1px solid var(--border-light);
                 border-radius: 8px;
-                margin-bottom: 5px;
+                margin-bottom: 8px;
             }
-
-            body.dark .tab {
-                border: 1px solid var(--border-dark);
-            }
-
-            .tab.active {
-                transform: none;
-                box-shadow: none;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            input, select, button {
-                padding: 10px;
-                font-size: 0.95rem;
-            }
-
-            .google-login, .anonymous-login {
-                padding: 8px;
-                font-size: 0.95rem;
+            .auth-container {
+                max-width: 90%;
+                padding: 20px;
             }
         }
 
         @media (max-width: 480px) {
             header h1 {
-                font-size: 1.8rem;
-                letter-spacing: 1px;
+                font-size: clamp(1.4rem, 3.5vw, 1.6rem);
             }
-
-            .motivational-quote {
-                font-size: 0.9rem;
-                padding: 5px 10px;
+            h2 {
+                font-size: clamp(1.3rem, 3vw, 1.5rem);
             }
-
             .auth-container {
                 padding: 15px;
-                max-width: 100%;
             }
-
-            h2 {
-                font-size: 1.5rem;
-                margin-bottom: 15px;
-            }
-
-            input, select, button {
-                padding: 10px;
-                font-size: 0.95rem;
-            }
-
-            .google-login img {
-                width: 18px;
-                height: 18px;
-            }
-        }
-
-        /* CSS remains mostly the same, with these additions: */
-        
-        /* Add smooth fade-in for page load */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        body {
-            animation: fadeIn 0.8s ease-out;
-        }
-        
-        /* Enhanced loading spinner */
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--primary-red);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-            display: none;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* More fluid animations */
-        * {
-            transition: all 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        /* Success message styling */
-        .success {
-            color: #27ae60;
-            background-color: rgba(39, 174, 96, 0.1);
-            display: none;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>Bricks Gym</h1>
-        <button class="theme-toggle" id="theme-toggle" role="button" aria-label="Toggle dark and light theme">🌙</button>
+        <button class="theme-toggle" id="theme-toggle" role="button" aria-label="Switch to dark theme">🌙</button>
     </header>
 
     <div class="motivational-quote" role="status" aria-live="polite">
@@ -738,7 +526,7 @@
                     <div class="input-group">
                         <label for="login-password" class="category-label">Password</label>
                         <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password">
-                        <span class="show-password" id="login-password-toggle" role="button" tabindex="0">Show</span>
+                        <span class="show-password" id="login-password-toggle" role="button" tabindex="0" aria-label="Toggle password visibility">Show</span>
                     </div>
                     <div class="input-group">
                         <label for="login-gender" class="category-label">Category (select for dashboard access)</label>
@@ -748,14 +536,17 @@
                             <option value="female">Female</option>
                         </select>
                     </div>
-                    <button type="submit">Secure Login</button>
+                    <button type="submit" aria-label="Submit login form">Secure Login</button>
                 </form>
-                <button class="google-login" id="google-login-btn">
-                    <img src="http://www.gstatic.com/firebasejs/icon.png" alt="Google Icon">
+                <button class="google-login" id="google-login-btn" aria-label="Log in with Google">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+                        <path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.344-7.574 7.439-7.574c2.327 0 3.904.91 4.785 1.692l3.258-3.132C18.285 1.781 15.616 0 12.24 0 6.96 0 2.45 4.027 2.45 9s4.51 9 9.79 9c5.454 0 9.027-3.835 9.027-9.228 0-.619-.056-1.226-.162-1.818h-8.905z"/>
+                    </svg>
                     Log in with Google
                 </button>
-                <button class="anonymous-login" id="anonymous-login-btn">Try as guest login</button>
+                <button class="anonymous-login" id="anonymous-login-btn" aria-label="Try as guest login">Try as Guest</button>
                 <p id="login-error" class="error" role="alert"></p>
+                <p id="login-success" class="success" role="alert"></p>
             </div>
 
             <div id="register-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-register">
@@ -772,7 +563,7 @@
                     <div class="input-group">
                         <label for="register-password" class="category-label">Password</label>
                         <input type="password" id="register-password" placeholder="Password" required autocomplete="new-password">
-                        <span class="show-password" id="register-password-toggle" role="button" tabindex="0">Show</span>
+                        <span class="show-password" id="register-password-toggle" role="button" tabindex="0" aria-label="Toggle password visibility">Show</span>
                     </div>
                     <div class="input-group">
                         <label for="register-gender" class="category-label">Category (Select for personalized dashboard)</label>
@@ -782,9 +573,10 @@
                             <option value="female">Female</option>
                         </select>
                     </div>
-                    <button type="submit">Submit</button>
+                    <button type="submit" aria-label="Submit registration form">Submit</button>
                 </form>
                 <p id="register-error" class="error" role="alert"></p>
+                <p id="register-success" class="success" role="alert"></p>
             </div>
 
             <div id="forgot-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-forgot">
@@ -794,9 +586,10 @@
                         <label for="forgot-email" class="category-label">Email</label>
                         <input type="email" id="forgot-email" placeholder="Enter your registered email" required autocomplete="email">
                     </div>
-                    <button type="submit">Reset</button>
+                    <button type="submit" aria-label="Submit password reset form">Reset</button>
                 </form>
                 <p id="forgot-error" class="error" role="alert"></p>
+                <p id="forgot-success" class="success" role="alert"></p>
             </div>
         </div>
     </main>
@@ -805,26 +598,28 @@
         <p>© 2025 Bricks Gym. All rights reserved. | Built with Strength & Dedication</p>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script>
-                // Fixed Firebase configuration
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signInAnonymously, sendPasswordResetEmail, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+        // Firebase configuration
         const firebaseConfig = {
-  apiKey: "AIzaSyAdbh13wPl4aKV_y4PkrUX30hN1kSPnPxE",
-  authDomain: "bricksgymmanagementsystem.firebaseapp.com",
-  projectId: "bricksgymmanagementsystem",
-  storageBucket: "bricksgymmanagementsystem.firebasestorage.app",
-  messagingSenderId: "184009603704",
-  appId: "1:184009603704:web:cbc41402a7c3ef1e3c4b8d",
-  measurementId: "G-SPS6F9XG9J"
-};
+            // IMPORTANT: Replace with your actual Firebase project's API key
+            apiKey: "AIzaSyAdbh13wPl4aKV_y4PkrUX30hN1kSPnPxE", // THIS IS A PLACEHOLDER KEY
+            authDomain: "bricksgymmanagementsystem.firebaseapp.com",
+            projectId: "bricksgymmanagementsystem",
+            storageBucket: "bricksgymmanagementsystem.firebasestorage.app",
+            messagingSenderId: "184009603704",
+            appId: "1:184009603704:web:cbc41402a7c3ef1e3c4b8d",
+            measurementId: "G-SPS6F9XG9J"
+        };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const provider = new firebase.auth.GoogleAuthProvider();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
         // DOM elements
         const authContainer = document.querySelector('.auth-container');
@@ -838,23 +633,23 @@
         const anonymousLoginButton = document.getElementById('anonymous-login-btn');
         const motivationalQuote = document.querySelector('.motivational-quote');
         let isRedirecting = false;
-        
+        let processingLogout = false; // Flag to manage logout state
+
         // Create spinner element
         const spinner = document.createElement('div');
         spinner.className = 'spinner';
         document.body.appendChild(spinner);
 
-        // Cache user data to reduce Firestore reads
+        // Cache user data
         const userCache = new Map();
 
-        // Helper function to display errors
-        function displayError(elementId, message, isSuccess = false) {
-            const errorElement = document.getElementById(elementId);
-            if (errorElement) {
-                errorElement.textContent = message;
-                errorElement.className = isSuccess ? 'success' : 'error';
-                errorElement.style.display = 'block';
-                
+        // Display messages
+        function displayMessage(elementId, message, isSuccess = false) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.className = isSuccess ? 'success' : 'error';
+                element.style.display = 'block';
                 if (!isSuccess) {
                     authContainer.classList.add('shake');
                     setTimeout(() => authContainer.classList.remove('shake'), 500);
@@ -862,45 +657,41 @@
             }
         }
 
-        // Map Firebase error codes to user-friendly messages
+        // Friendly error messages
         function getFriendlyErrorMessage(error) {
             const errorMap = {
                 'auth/invalid-email': 'Please enter a valid email address.',
                 'auth/user-not-found': 'No account found with this email.',
                 'auth/wrong-password': 'Incorrect password. Please try again.',
                 'auth/email-already-in-use': 'This email is already in use.',
-                'auth/weak-password': 'Password is too weak. Please use at least 6 characters.',
-                'auth/too-many-requests': 'Too many login attempts. Please try again later.',
-                'auth/popup-closed-by-user': 'Google login popup window closed.',
-                'auth/cancelled-popup-request': 'Login popup cancelled.',
+                'auth/weak-password': 'Password must be at least 6 characters long.',
+                'auth/too-many-requests': 'Too many attempts. Please try again later.',
+                'auth/popup-closed-by-user': 'Google login was cancelled.',
                 'auth/network-request-failed': 'Network error. Please check your connection.'
             };
-            return errorMap[error.code] || `An error occurred: ${error.message}`;
+            return errorMap[error.code] || `An error occurred: ${error.code} - ${error.message}`;
         }
 
-        // Handle theme toggle
+        // Theme toggle
         function initializeTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                themeToggle.textContent = '☀️';
-            }
-            
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark');
-                themeToggle.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-                localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            document.body.classList.toggle('dark', savedTheme === 'dark');
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            themeToggle.setAttribute('aria-label', savedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.body.classList.toggle('dark');
+                themeToggle.textContent = isDark ? '☀️' : '🌙';
+                themeToggle.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
             });
         }
 
-        // Handle tab switching
+        // Tab switching
         function initializeTabs() {
             tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(tab);
-                });
-                
-                tab.addEventListener('keypress', function(e) {
+                tab.addEventListener('click', () => switchTab(tab));
+                tab.addEventListener('keypress', e => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         switchTab(tab);
@@ -910,42 +701,36 @@
         }
 
         function switchTab(selectedTab) {
-            const tabId = selectedTab.id.replace('tab-', '');
-            
-            // Update tabs
             tabs.forEach(tab => {
                 tab.classList.remove('active');
                 tab.setAttribute('aria-selected', 'false');
             });
             selectedTab.classList.add('active');
             selectedTab.setAttribute('aria-selected', 'true');
-            
-            // Update tab contents
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-            });
+
+            tabContents.forEach(content => content.classList.remove('active'));
+            const tabId = selectedTab.id.replace('tab-', '');
             document.getElementById(`${tabId}-tab`).classList.add('active');
-            
-            clearErrors();
+
+            clearMessages();
         }
 
-        // Clear all error messages
-        function clearErrors() {
-            document.querySelectorAll('.error, .success').forEach(error => {
-                error.style.display = 'none';
-                error.textContent = '';
+        // Clear messages
+        function clearMessages() {
+            document.querySelectorAll('.error, .success').forEach(element => {
+                element.style.display = 'none';
+                element.textContent = '';
             });
             authContainer.classList.remove('shake');
         }
 
-        // Setup password visibility toggle
+        // Password toggle
         function setupPasswordToggle(toggleBtnId, passwordInputId) {
             const toggleBtn = document.getElementById(toggleBtnId);
             const passwordInput = document.getElementById(passwordInputId);
-            
             if (toggleBtn && passwordInput) {
                 toggleBtn.addEventListener('click', togglePassword);
-                toggleBtn.addEventListener('keypress', (e) => {
+                toggleBtn.addEventListener('keypress', e => {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         togglePassword();
@@ -961,25 +746,21 @@
             }
         }
 
-        // Setup input validation
+        // Input validation
         function setupInputValidation() {
             document.querySelectorAll('input[required], select').forEach(input => {
-                input.addEventListener('input', function() {
-                    validateInput(input);
-                });
-                input.addEventListener('blur', function() {
-                    validateInput(input);
-                });
+                input.addEventListener('input', () => validateInput(input));
+                input.addEventListener('blur', () => validateInput(input));
             });
 
             const registerPasswordInput = document.getElementById('register-password');
             if (registerPasswordInput) {
-                registerPasswordInput.addEventListener('input', function() {
+                registerPasswordInput.addEventListener('input', () => {
                     const value = registerPasswordInput.value;
                     if (value.length < 6 && value.length > 0) {
-                        displayError('register-error', 'Password must be at least 6 characters long.');
+                        displayMessage('register-error', 'Password must be at least 6 characters.');
                     } else {
-                        clearErrors();
+                        clearMessages();
                     }
                 });
             }
@@ -1000,22 +781,20 @@
             }
         }
 
-        // Manage button loading state
+        // Button loading state
         function setButtonLoading(button, isLoading) {
             if (isLoading) {
                 button.disabled = true;
-                button.style.opacity = '0.8';
-                button.style.cursor = 'not-allowed';
+                button.style.opacity = '0.7';
                 spinner.style.display = 'block';
             } else {
                 button.disabled = false;
                 button.style.opacity = '1';
-                button.style.cursor = 'pointer';
                 spinner.style.display = 'none';
             }
         }
 
-        // Redirect user based on gender
+        // Redirect user
         async function redirectUser(user, initialGender = null) {
             if (isRedirecting) return;
             isRedirecting = true;
@@ -1023,62 +802,61 @@
 
             try {
                 let userGender = userCache.get(user.uid)?.gender;
-                
-                // Try to get user data from Firestore
                 if (!userGender) {
-                    const userDocRef = db.collection('users').doc(user.uid);
-                    const docSnap = await userDocRef.get();
-                    
-                    if (docSnap.exists) {
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const docSnap = await getDoc(userDocRef);
+                    if (docSnap.exists()) {
                         userGender = docSnap.data().gender;
                         userCache.set(user.uid, { gender: userGender });
                     }
                 }
 
-                // If no gender exists but we have initial gender, set it
                 if (!userGender && initialGender) {
                     try {
-                        const userDocRef = db.collection('users').doc(user.uid);
-                        await userDocRef.set({
+                        await setDoc(doc(db, 'users', user.uid), {
                             name: user.displayName || 'Gym Member',
                             email: user.email,
                             gender: initialGender,
                             role: 'member',
                             membershipStatus: 'trial',
                             workoutPreferences: [],
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            createdAt: serverTimestamp()
                         }, { merge: true });
-                        
                         userGender = initialGender;
                         userCache.set(user.uid, { gender: userGender });
                     } catch (error) {
                         console.error('Firestore write error:', error);
-                        displayError('login-error', 'Failed to save user data. Please try again.');
+                        displayMessage('login-error', 'Failed to save user data.');
                         return;
                     }
                 }
 
-                // Redirect based on gender
-                if (userGender === 'male') {
-                    window.location.href = '/dashboard-male.html';
-                } else if (userGender === 'female') {
-                    window.location.href = '/dashboard-female.html';
-                } else if (userGender === 'guest') {
-                    window.location.href = '/dashboard-guest.html';
+                // If a valid gender is determined, set auth flag and redirect
+                if (userGender === 'male' || userGender === 'female' || userGender === 'guest') {
+                    localStorage.setItem('auth', 'true'); // Signal to dashboard pages that auth is successful
+                    if (userGender === 'male') {
+                        window.location.href = 'boysdashboard.html';
+                    } else if (userGender === 'female') {
+                        window.location.href = 'girlsdashboard.html';
+                    } else if (userGender === 'guest') {
+                        window.location.href = 'guestdashboard.html';
+                    }
                 } else {
-                    displayError('login-error', 'Please select a category to proceed.');
+                    localStorage.removeItem('auth'); // Clear auth flag if redirect cannot proceed
+                    displayMessage('login-error', 'Could not determine user category for dashboard. Please ensure a category is selected or try logging in again.');
                 }
             } catch (error) {
                 console.error('Redirect error:', error);
-                displayError('login-error', 'An error occurred during redirection.');
+                displayMessage('login-error', 'An error occurred during redirection.');
+                localStorage.removeItem('auth'); // Clear auth flag on error
             } finally {
                 isRedirecting = false;
                 spinner.style.display = 'none';
             }
         }
 
-        // Handle login form submission
-        loginForm.addEventListener('submit', async (e) => {
+        // Login form submission
+        loginForm.addEventListener('submit', async e => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
@@ -1086,25 +864,24 @@
             const loginButton = loginForm.querySelector('button[type="submit"]');
 
             if (!gender) {
-                displayError('login-error', 'Please select a category.');
+                displayMessage('login-error', 'Please select a category.');
                 return;
             }
 
             setButtonLoading(loginButton, true);
-
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
+                const { user } = await signInWithEmailAndPassword(auth, email, password);
                 await redirectUser(user, gender);
+                displayMessage('login-success', 'Login successful! Redirecting...', true);
             } catch (error) {
-                displayError('login-error', getFriendlyErrorMessage(error));
+                displayMessage('login-error', getFriendlyErrorMessage(error));
             } finally {
                 setButtonLoading(loginButton, false);
             }
         });
 
-        // Handle register form submission
-        registerForm.addEventListener('submit', async (e) => {
+        // Register form submission
+        registerForm.addEventListener('submit', async e => {
             e.preventDefault();
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -1113,110 +890,78 @@
             const registerButton = registerForm.querySelector('button[type="submit"]');
 
             if (!gender) {
-                displayError('register-error', 'Please select a category.');
+                displayMessage('register-error', 'Please select a category.');
                 return;
             }
 
             setButtonLoading(registerButton, true);
-
             try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                await user.updateProfile({ displayName: name });
+                const { user } = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(user, { displayName: name });
                 await redirectUser(user, gender);
+                displayMessage('register-success', 'Registration successful! Redirecting...', true);
             } catch (error) {
-                displayError('register-error', getFriendlyErrorMessage(error));
+                displayMessage('register-error', getFriendlyErrorMessage(error));
             } finally {
                 setButtonLoading(registerButton, false);
             }
         });
 
-        // Handle forgot password form submission
-        forgotPasswordForm.addEventListener('submit', async (e) => {
+        // Forgot password form submission
+        forgotPasswordForm.addEventListener('submit', async e => {
             e.preventDefault();
             const email = document.getElementById('forgot-email').value;
             const resetButton = forgotPasswordForm.querySelector('button[type="submit"]');
 
             setButtonLoading(resetButton, true);
-
             try {
-                await auth.sendPasswordResetEmail(email);
-                displayError('forgot-error', 'Password reset email sent! Check your inbox.', true);
+                await sendPasswordResetEmail(auth, email);
+                displayMessage('forgot-success', 'Password reset email sent! Check your inbox.', true);
             } catch (error) {
-                displayError('forgot-error', getFriendlyErrorMessage(error));
+                displayMessage('forgot-error', getFriendlyErrorMessage(error));
             } finally {
                 setButtonLoading(resetButton, false);
             }
         });
 
-        // Handle Google login
+        // Google login
         googleLoginButton.addEventListener('click', async () => {
+            const selectedGender = document.getElementById('login-gender').value;
             setButtonLoading(googleLoginButton, true);
             try {
-                const result = await auth.signInWithPopup(provider);
-                const user = result.user;
-                await redirectUser(user);
+                const { user } = await signInWithPopup(auth, provider);
+                await redirectUser(user, selectedGender || null); // Pass selected gender if available
+                displayMessage('login-success', 'Google login successful! Redirecting...', true);
             } catch (error) {
-                displayError('login-error', getFriendlyErrorMessage(error));
+                displayMessage('login-error', getFriendlyErrorMessage(error));
             } finally {
                 setButtonLoading(googleLoginButton, false);
             }
         });
 
-        // Handle anonymous login
+        // Anonymous login
         anonymousLoginButton.addEventListener('click', async () => {
             setButtonLoading(anonymousLoginButton, true);
             try {
-                const userCredential = await auth.signInAnonymously();
-                const user = userCredential.user;
+                const { user } = await signInAnonymously(auth);
                 await redirectUser(user, 'guest');
+                displayMessage('login-success', 'Guest login successful! Redirecting...', true);
             } catch (error) {
-                displayError('login-error', getFriendlyErrorMessage(error));
+                displayMessage('login-error', getFriendlyErrorMessage(error));
             } finally {
                 setButtonLoading(anonymousLoginButton, false);
             }
         });
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Initialize components
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
             initializeTheme();
             initializeTabs();
             setupInputValidation();
             setupPasswordToggle('login-password-toggle', 'login-password');
             setupPasswordToggle('register-password-toggle', 'register-password');
-            
-            // Preload Firebase SDKs
-            await Promise.all([
-                new Promise(resolve => {
-                    if (firebase.apps.length) return resolve();
-                    const script = document.createElement('script');
-                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js';
-                    script.onload = resolve;
-                    document.head.appendChild(script);
-                }),
-                new Promise(resolve => {
-                    const script = document.createElement('script');
-                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js';
-                    script.onload = resolve;
-                    document.head.appendChild(script);
-                }),
-                new Promise(resolve => {
-                    const script = document.createElement('script');
-                    script.src = 'https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js';
-                    script.onload = resolve;
-                    document.head.appendChild(script);
-                })
-            ]);
-            
-            // Set up auth state listener
-            auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    await redirectUser(user);
-                }
-            });
-            
-            // Rotate motivational quotes
+
+            // Rotate quotes
             const quotes = [
                 "Strength does not come from what you can do. It comes from overcoming the things you once thought you could not do.",
                 "The body achieves what the mind believes.",
@@ -1224,60 +969,91 @@
                 "The only bad workout is the one that didn't happen.",
                 "Your body can stand almost anything. It's your mind you have to convince."
             ];
-            
             let quoteIndex = 0;
             motivationalQuote.textContent = `"${quotes[quoteIndex]}"`;
-            
+
             setInterval(() => {
                 quoteIndex = (quoteIndex + 1) % quotes.length;
                 motivationalQuote.style.opacity = 0;
-                
                 setTimeout(() => {
                     motivationalQuote.textContent = `"${quotes[quoteIndex]}"`;
                     motivationalQuote.style.opacity = 1;
                 }, 500);
             }, 8000);
-        });
 
-        // logout automatically after when user exit browser
-        window.addEventListener('beforeunload', () => {
-            if (auth.currentUser) {
-                auth.signOut().catch(error => {
-                    console.error('Sign out error:', error);
-                });
-            }
-        });
-
-        // Initialize theme and tabs
-        initializeTheme();
-        initializeTabs();
-        setupInputValidation();
-        setupPasswordToggle('login-password-toggle', 'login-password');
-        setupPasswordToggle('register-password-toggle', 'register-password');
-
-        // Add keyboard navigation for tabs
-        tabs.forEach(tab => {
-            tab.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    const nextTab = tab.nextElementSibling || tabs[0];
-                    nextTab.focus();
-                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    const prevTab = tab.previousElementSibling || tabs[tabs.length - 1];
-                    prevTab.focus();
+            // Auth state listener
+            onAuthStateChanged(auth, async user => {
+                if (user && !processingLogout) {
+                    // If user is authenticated and we are not in the middle of a logout process,
+                    // attempt to redirect them.
+                    if (!isRedirecting) { // Ensure redirectUser isn't already running
+                        await redirectUser(user);
+                    }
+                } else if (!user) {
+                    // User is signed out or not authenticated.
+                    if (localStorage.getItem('auth')) {
+                        localStorage.removeItem('auth');
+                    }
+                    if (!processingLogout) spinner.style.display = 'none';
                 }
             });
-        });
 
-        // Add focus styles for better accessibility
-        document.querySelectorAll('input, select, button').forEach(element => {
-            element.addEventListener('focus', () => {
-                element.style.outline = '2px solid var(--primary-red)';
+            // Keyboard navigation
+            tabs.forEach(tab => {
+                tab.addEventListener('keydown', e => {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const nextTab = tab.nextElementSibling || tabs[0];
+                        nextTab.focus();
+                        switchTab(nextTab);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const prevTab = tab.previousElementSibling || tabs[tabs.length - 1];
+                        prevTab.focus();
+                        switchTab(prevTab);
+                    }
+                });
             });
-            element.addEventListener('blur', () => {
-                element.style.outline = 'none';
+
+            // Focus styles
+            document.querySelectorAll('input, select, button, .tab').forEach(element => {
+                element.addEventListener('focus', () => {
+                    element.style.outline = `2px solid var(--primary-blue)`;
+                    element.style.outlineOffset = '2px';
+                });
+                element.addEventListener('blur', () => {
+                    element.style.outline = 'none';
+                });
             });
+
+            // Handle logout if ?logout=true is in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('logout')) {
+                processingLogout = true;
+                setButtonLoading(document.createElement('button'), true); // Show spinner
+                signOut(auth).then(() => {
+                    displayMessage('login-success', 'You have been successfully logged out.', true);
+                }).catch((error) => {
+                    console.error("Logout error:", error);
+                    displayMessage('login-error', 'Error logging out: ' + getFriendlyErrorMessage(error));
+                }).finally(() => {
+                    localStorage.removeItem('auth');
+                    userCache.clear(); // Clear any cached user data
+                    
+                    // Reset login form elements if needed
+                    document.getElementById('login-email').value = '';
+                    document.getElementById('login-password').value = '';
+                    document.getElementById('login-gender').value = '';
+
+                    // Remove the query parameter from URL without reloading
+                    const newUrl = window.location.pathname;
+                    history.replaceState({}, document.title, newUrl);
+                    
+                    processingLogout = false;
+                    setButtonLoading(document.createElement('button'), false); // Hide spinner
+                    switchTab(document.getElementById('tab-login')); // Ensure login tab is active
+                });
+            }
         });
     </script>
 </body>
